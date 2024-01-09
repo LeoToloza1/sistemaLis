@@ -1,0 +1,59 @@
+include head
+include navBar
+
+.container
+    h1 Listado historico de ordenes del paciente: #{pacienteEncontrado.nombre} #{pacienteEncontrado.apellido}
+
+.container-fluid.card
+    table#tablaGenerica.table.table-striped.card-body
+        thead
+            tr
+                th Numero de Orden
+                th Paciente
+                th Estado
+                th fecha de Resultado
+                th Diagnóstico
+                th Observaciones
+                th Usuario
+                th Detalles
+        tbody
+.container.my-4
+    button#btnOrden.btn.btn-primary.btn-sm(type="button" data-toggle="modal" onclick="formularioOrden()") Crear Orden
+
+#crearOrdenModal.modal.fade(tabindex='-1' role='dialog')
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                h5.modal-title Formulario Orden
+            .modal-body
+                form#formularioOrden
+                    .form-group
+                        input(type="hidden" id="idOrden" value="")
+                    .form-group
+                        label(for="estado") Estado:
+                        select.form-control(type="text" id="id_estado" name="id_estado", required)
+                    .form-group
+                        label(for="fechaResultado") Fecha de resultado:
+                        input.form-control(type="date" id="fechaResultado" name="fechaResultado" readonly)
+                    .form-group
+                        label(for="diagnostico") Diagnóstico:
+                        select.form-control(type="text" id="id_diagnostico" name="id_diagnostico", required)
+                    .form-group
+                        label(for="observaciones") Observaciones:
+                        input.form-control(type="text" id="observaciones" name="observaciones")
+                    .form-group
+                        label(for='examenes') Examenes disponibles
+                        select.form-control(id="id_examen" name="id_examen" multiple)
+                    .form-group
+                        label(for='muestras') Muestra cargada:
+                        select.form-control(id='id_muestra' name='id_muestra') 
+                    .form-group
+                        label(for="usuario") Usuario:
+                        select.form-control(type="text" id="id_usuario" name="id_usuario")
+                        .modal-footer
+                            button.btn.btn-primary(type="button" onclick="guardar_actualizarOrden()") Guardar
+                            button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cerrar
+
+
+
+script(src="/js/listadoOrdenes.js") 

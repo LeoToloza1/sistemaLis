@@ -1,0 +1,11 @@
+include head
+include navBar
+
+div.container
+    h1 Gestion de Muestras para el Paciente: #{pacienteEncontrado.nombre} #{pacienteEncontrado.apellido} 
+
+include tablaMuestras
+
+
+
+script(src="/js/tablaMuestras.js" defer)

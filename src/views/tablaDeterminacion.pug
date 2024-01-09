@@ -1,0 +1,45 @@
+.container-fluid
+    .row
+        table#tablaGenerica.table.table-striped
+            caption Determinaciones
+            thead
+                tr
+                    th Nombre
+                    th Estado
+                    th Valores de referencia
+                    th Unidad de Medida
+                    th Observaciones
+                    th Cargado Por
+                    th Acciones
+            tbody#tablaGenerica
+
+#formularioDeterminacion.modal.fade(tabindex='-1' role='dialog')
+    .modal-dialog.modal-xl(role='document')
+        .modal-content
+            .modal-header
+                h5.modal-title Formulario nueva Determinación
+            .modal-body
+                form#formularioDeterminacion
+                    .form-group
+                        input(type="hidden" id="idDeterminacion" value="")
+                    .form-group
+                        label(for="nombre") Nombre:
+                        input.form-control(type="text" id="nombre" name="nombre", required)
+                    .form-group
+                        label(for="id_estado") Estado:
+                        select.form-control(id="id_estado" name="id_estado")
+                    .form-group
+                        label(for="valoresReferencia") Valores de referencia:
+                        select.form-control(id="valoresReferencia" name="valoresReferencia")
+                    .form-group
+                        label(for="unidadMedida") Unidad de Medida:
+                        select.form-control(id="unidadMedida" name="unidadMedida")
+                    .form-group
+                        label(for="observaciones") Observaciones:
+                        input.form-control(type="text" id="observaciones" name="observaciones")
+                    .form-group
+                        label(for="id_usuario") Usuario:
+                        select.form-control(id="id_usuario" name="id_usuario")
+                    .modal-footer
+                        button.btn.btn-primary(type="button" onclick="guardar_actualizarDeterminacion()") Guardar
+                        button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cerrar

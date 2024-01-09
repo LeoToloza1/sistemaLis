@@ -1,0 +1,49 @@
+.container-fluid
+    .row
+        table#tablaGenerica.table.table-striped
+            caption Examenes
+            thead
+                tr
+                    th Nombre
+                    th Codigo
+                    th Determinacion
+                    th Tipo de Muestra requerida
+                    th Estado
+                    th Demora (en dias)
+                    th Cargado Por
+                    th Acciones
+            tbody#tablaGenerica
+
+#formularioExamen.modal.fade(tabindex='-1' role='dialog')
+    .modal-dialog(role='document')
+        .modal-content
+            .modal-header
+                h5.modal-title Formulario Examen
+            .modal-body
+                form#formularioExamen
+                    .form-group
+                        input(type="hidden" id="idExamen" value="")
+                    .form-group
+                        label(for="nombre") Nombre:
+                        input.form-control(type="text" id="nombre" name="nombre", required)
+                    .form-group
+                        label(for="codigo") Código:
+                        input.form-control(type="text" id="codigo" name="codigo", required)
+                    .form-group
+                        label(for="id_estado") Estado:
+                        select.form-control(id="id_estado" name="id_estado")
+                    .form-group
+                        label(for="id_determinacion") Determinación:
+                        select.form-control(id="id_determinacion" name="id_determinacion" multiple)
+                    .form-group
+                        label(for="tiempo") Tiempo:
+                        input.form-control(type="number" id="tiempo" name="tiempo" min="0")
+                    .form-group
+                        label(for="id_usuario") Usuario:
+                        select.form-control(id="id_usuario" name="id_usuario")
+                    .form-group
+                        label(for="tipoMuestra") Tipo de Muestra requerida: 
+                        select.form-control(id="id_tipoMuestra" name="id_tipoMuestra" multiple) 
+                    .modal-footer
+                        button.btn.btn-primary(type="button" onclick="guardar_actualizarExamen()") Guardar
+                        button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cerrar
