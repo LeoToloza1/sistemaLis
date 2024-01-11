@@ -6,9 +6,7 @@ const path = window.location.pathname;
 // Divide la ruta en segmentos
 const segments = path.split("/");
 const idPaciente = segments[segments.length - 1];
-
 // console.log(idPaciente); // Debería imprimir "3"
-
 const dataTableOpciones = {
   lengthMenu: [5, 10, 15, 20],
   dom: "Bfrtilp",
@@ -41,7 +39,7 @@ async function obtenerDatos() {
     const urls = [
       `/listar/orden/paciente/${idPaciente}`,
       `/paciente/${idPaciente}`,
-      "/listar/examenes",
+      "/listar/examenes/activos",
       "/estados",
       "/diagnosticos",
       "/usuarios",
@@ -104,6 +102,10 @@ const initDataTable = async () => {
   });
   dataTableInit = true;
 };
+/**
+ * me quede en la tarea de aviso de fecha de entrega, pero ya esta presente ese dato.
+ * voy a evaluar la posibilidad de poder editarlo, segun la fecha del examen
+ */
 async function cargarDatosEnTabla() {
   try {
     const { datosOrdenesPorPaciente, examenes, analisis } =
@@ -139,6 +141,7 @@ async function cargarDatosEnTabla() {
 }
 
 async function formularioOrden() {
+  reiniciarFormulario();
   const { examenes, estados, diagnosticos, usuarios, paciente, muestra } =
     await obtenerDatos();
   document.querySelector(
@@ -160,14 +163,12 @@ async function formularioOrden() {
     .map((examen) => `<option value="${examen.id}">${examen.nombre}</option>`)
     .join("");
   const muestraSelect = document.getElementById("id_muestra");
-  muestraSelect.innerHTML =
-    `<option value="">Seleccionar Muestra</option>` +
-    muestra
-      .map(
-        (muestra) =>
-          `<option value="${muestra.id}">${muestra.tipoMuestra.nombre}</option>`
-      )
-      .join("");
+  muestraSelect.innerHTML = muestra
+    .map(
+      (muestra) =>
+        `<option value="${muestra.id}">${muestra.tipoMuestra.nombre}</option>`
+    )
+    .join("");
 
   const usuarioSelect = document.getElementById("id_usuario");
   usuarioSelect.innerHTML = usuarios
@@ -269,6 +270,7 @@ async function guardarOrden() {
       id_muestra,
       id_usuario,
     };
+    console.log("ORDEN --> ", orden);
     const respuesta = await fetch(`/agregar/orden/paciente`, {
       method: "POST",
       headers: {
@@ -286,54 +288,79 @@ async function guardarOrden() {
 const idOrden = document.getElementById("idOrden").value;
 async function editarOrden(idOrden) {
   actualizar = true;
+  const estadosEditables = ["1", "2", "3", "4", "12"];
   const estadoSelect = document.getElementById("id_estado");
   const id_estado = estadoSelect.options[estadoSelect.selectedIndex].value;
-  const fechaResultado = document.getElementById("fechaResultado").value;
-  const diagnosticoSelect = document.getElementById("id_diagnostico");
-  const id_diagnostico = Number(
-    diagnosticoSelect.options[diagnosticoSelect.selectedIndex].value
-  );
-  const observacionesElement = document.getElementById("observaciones");
-  const observaciones = observacionesElement ? observacionesElement.value : "";
-  const examenSelect = document.getElementById("id_examen");
-  const id_examen = Array.from(examenSelect.selectedOptions).map((option) =>
-    Number(option.value)
-  );
-  const muestraSelect = document.getElementById("id_muestra");
-  const id_muestra = Number(
-    muestraSelect.options[muestraSelect.selectedIndex].value
-  );
-  let id_usuario = document.getElementById("id_usuario").value;
-  if (id_usuario === "") {
-    id_usuario = null;
-  }
-  const orden = {
-    idOrden,
-    id_estado,
-    fechaResultado,
-    id_diagnostico,
-    observaciones,
-    id_examen,
-    id_muestra,
-    id_usuario,
-  };
-  console.log("ORDEN EDITADA-->", orden);
-  try {
-    const respuesta = await fetch(`/actualizar/orden/paciente/${idOrden}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(orden),
-    });
-    alert("Orden editada con exito");
-    initDataTable();
-    $("#crearOrdenModal").modal("hide");
-  } catch (error) {
-    console.error("Error en la solicitud:", error);
+  if (estadosEditables.includes(id_estado)) {
+    const fechaResultado = document.getElementById("fechaResultado").value;
+    const diagnosticoSelect = document.getElementById("id_diagnostico");
+    const id_diagnostico = Number(
+      diagnosticoSelect.options[diagnosticoSelect.selectedIndex].value
+    );
+    const observacionesElement = document.getElementById("observaciones");
+    const observaciones = observacionesElement
+      ? observacionesElement.value
+      : "";
+    const examenSelect = document.getElementById("id_examen");
+    const id_examen = Array.from(examenSelect.selectedOptions).map((option) =>
+      Number(option.value)
+    );
+    const muestraSelect = document.getElementById("id_muestra");
+    const id_muestra = Number(
+      muestraSelect.options[muestraSelect.selectedIndex].value
+    );
+
+    let id_usuario = document.getElementById("id_usuario").value;
+    if (id_usuario === "") {
+      id_usuario = null;
+    }
+
+    const orden = {
+      idOrden,
+      id_estado,
+      fechaResultado,
+      id_diagnostico,
+      observaciones,
+      id_examen,
+      id_muestra,
+      id_usuario,
+    };
+
+    console.log("ORDEN EDITADA-->", orden);
+
+    try {
+      const respuesta = await fetch(`/actualizar/orden/paciente/${idOrden}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orden),
+      });
+
+      alert("Orden editada con éxito");
+      initDataTable();
+      $("#crearOrdenModal").modal("hide");
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  } else {
+    alert(
+      "La orden no puede ser editada porque no cumple con los permisos requeridos."
+    );
   }
 }
 
 $(function () {
   initDataTable();
 });
+
+function reiniciarFormulario() {
+  document.getElementById("idOrden").value = "";
+  document.getElementById("id_estado").value = "";
+  document.getElementById("fechaResultado").value = "";
+  document.getElementById("id_diagnostico").value = "";
+  document.getElementById("observaciones").value = "";
+  document.getElementById("id_examen").value = "";
+  document.getElementById("id_muestra").value = "";
+  document.getElementById("id_usuario").value = "";
+}

@@ -46,13 +46,15 @@ include navBar
                         select.form-control(id="id_examen" name="id_examen" multiple)
                     .form-group
                         label(for='muestras') Muestra cargada:
-                        select.form-control(id='id_muestra' name='id_muestra') 
+                        select.form-control(id='id_muestra' name='id_muestra')
+                            option(value="") Seleccionar Muestra
                     .form-group
                         label(for="usuario") Usuario:
                         select.form-control(type="text" id="id_usuario" name="id_usuario")
-                        .modal-footer
-                            button.btn.btn-primary(type="button" onclick="guardar_actualizarOrden()") Guardar
-                            button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cerrar
+                .modal-footer
+                    button.btn.btn-primary(type="button" onclick="guardar_actualizarOrden()") Guardar
+                    button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cerrar
+
 
 
 

@@ -2,6 +2,7 @@ import {
   actualizarDeterminacion,
   crearDeterminacion,
   listarDeterminacion,
+  listarDeterminacionActiva,
 } from "../controller/determinacionController.js";
 import express from "express";
 const determinacionRouter = express.Router();
@@ -42,6 +43,14 @@ determinacionRouter.post("/actualizar/determinacion/:id", async (req, res) => {
 determinacionRouter.get("/listar/determinaciones", async (req, res) => {
   try {
     const determinaciones = await listarDeterminacion();
+    res.status(200).json(determinaciones);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+determinacionRouter.get("/listar/determinaciones/activas", async (req, res) => {
+  try {
+    const determinaciones = await listarDeterminacionActiva();
     res.status(200).json(determinaciones);
   } catch (error) {
     res.status(500).json(error);

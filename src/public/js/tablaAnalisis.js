@@ -71,24 +71,14 @@ const initDataTable = async () => {
   }
   await cargarDatosEnTabla();
   dataTable = $("#tablaGenerica").DataTable(dataTableOpciones);
-  dataTable.on("draw", function () {
-    // const info = dataTable.page.info();
-    // if (info.recordsDisplay === 0) {
-    //   const content = `
-    //         <tr>
-    //           <td colspan="8" style="text-align: center;">
-    //             <button class="btn btn-primary" >Crear Nueva Orden</button>
-    //           </td>
-    //         </tr>`;
-    //   $("#tablaGenerica tbody").html(content);
-    // }
-  });
+  dataTable.on("draw");
   dataTableInit = true;
 };
 async function cargarDatosEnTabla() {
   try {
     const { analisisPorPaciente } = await obtenerDatos();
     let content = ``;
+
     analisisPorPaciente.forEach((dato, index) => {
       let muestraContent = "No hay muestra cargada";
       if (dato.muestra) {
@@ -104,13 +94,9 @@ async function cargarDatosEnTabla() {
               <td> ${dato.estado.nombre} </td>
               <td> ${dato.descripcion || "No hay observaciones"} </td>
               <td> ${muestraContent}</td>
-
             </tr>`;
     });
     $("#tablaGenerica tbody").html(content);
-    $(".editar-btn").on("click", function () {
-      const index = $(this).data("index");
-    });
   } catch (error) {
     console.error("Error al cargar datos en la tabla", error);
   }

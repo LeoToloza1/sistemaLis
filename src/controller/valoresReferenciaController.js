@@ -8,6 +8,20 @@ export const listarValoresReferencia = async () => {
     return "Ocurrio un error al obtener los valores de referencia", error;
   }
 };
+export const listarValoresReferenciaActivos = async () => {
+  try {
+    const valores = await valoresReferencia.findAll({
+      where: { estado: "activo" },
+    });
+    return valores;
+  } catch (error) {
+    console.error(
+      "Ocurrió un error al obtener los valores de referencia",
+      error
+    );
+    return { error: "Ocurrió un error al obtener los valores de referencia" };
+  }
+};
 
 export const agregarValorReferencia = async (valor) => {
   try {

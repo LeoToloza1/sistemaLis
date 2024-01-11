@@ -43,7 +43,7 @@ async function obtenerDatos() {
       "/listar/examenes",
       "/estados",
       "/usuarios",
-      "/listar/determinaciones",
+      "/listar/determinaciones/activas",
       "/listar/tipoMuestra",
     ];
     const fetchPromises = urls.map((url) => fetch(url));
@@ -277,7 +277,7 @@ async function editarExamen(idExamen) {
   const nombre = document.getElementById("nombre").value;
   const codigo = document.getElementById("codigo").value;
   const estadoSelect = document.getElementById("id_estado");
-  const estado = estadoSelect.options[estadoSelect.selectedIndex].value;
+  const id_estado = estadoSelect.options[estadoSelect.selectedIndex].value;
   const determinacionSelect = document.getElementById("id_determinacion");
   const id_determinacion = Array.from(determinacionSelect.selectedOptions).map(
     (option) => Number(option.value)
@@ -295,14 +295,13 @@ async function editarExamen(idExamen) {
     id: idExamen,
     nombre,
     codigo,
-    estado,
+    id_estado,
     id_determinacion,
     tiempo,
     id_usuario,
     tipoMuestraIds,
   };
   // console.log("Linea 297 - editar examen-> ", examen);
-
   try {
     const respuesta = await fetch(`/actualizar/examen/${idExamen}`, {
       method: "POST",

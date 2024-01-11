@@ -47,6 +47,49 @@ export const listarExamenes = async function () {
     return { error: "Error al listar los examenes" };
   }
 };
+export const listarExamenesActivos = async function () {
+  try {
+    const exam = await Examen.findAll({
+      include: [
+        {
+          model: Determinacion,
+          attributes: ["nombre"],
+          as: "determinacion",
+          include: [
+            {
+              model: Estados,
+              attributes: ["nombre"],
+            },
+            {
+              model: valoresReferencia,
+              attributes: [
+                "genero",
+                "edadMin",
+                "edadMax",
+                "valorMin",
+                "valorMax",
+                "embarazo",
+              ],
+              as: "valoresReferencia",
+            },
+            {
+              model: unidadMedida,
+              attributes: ["nombre", "abreviatura"],
+            },
+          ],
+        },
+        { model: Estados, attributes: ["nombre"], where: { nombre: "activo" } },
+        { model: Usuario, attributes: ["nombre"] },
+        { model: tipoMuestra, through: "examenTipoMuestra" },
+      ],
+    });
+    return exam;
+  } catch (error) {
+    console.error("Error al listar los examenes:", error);
+    return { error: "Error al listar los examenes" };
+  }
+};
+
 export async function registrarExamen(examen, idMuestra, idDeterminacion) {
   try {
     const nuevoExamen = await Examen.create(examen);

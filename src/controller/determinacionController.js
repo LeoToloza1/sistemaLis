@@ -42,6 +42,39 @@ export const listarDeterminacion = async () => {
     return "Ocurrio un error al obtener las determinaciones", error;
   }
 };
+export const listarDeterminacionActiva = async () => {
+  try {
+    const determinaciones = await Determinacion.findAll({
+      include: [
+        {
+          model: Estados,
+          attributes: ["nombre"],
+          where: { nombre: "activo" }, // Filtro para el estado activo
+        },
+        {
+          model: valoresReferencia,
+          attributes: [
+            "genero",
+            "edadMin",
+            "edadMax",
+            "valorMin",
+            "valorMax",
+            "embarazo",
+          ],
+          as: "valoresReferencia",
+        },
+        {
+          model: unidadMedida,
+          attributes: ["nombre", "abreviatura"],
+        },
+      ],
+    });
+    return determinaciones;
+  } catch (error) {
+    console.error("Ocurrió un error al obtener las determinaciones", error);
+    return { error: "Ocurrió un error al obtener las determinaciones" };
+  }
+};
 
 export const actualizarDeterminacion = async (determinacion) => {
   try {

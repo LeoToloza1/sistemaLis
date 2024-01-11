@@ -2,6 +2,7 @@ import {
   listarExamenes,
   editarExamen,
   registrarExamen,
+  listarExamenesActivos,
 } from "../controller/examenController.js";
 import express from "express";
 const routerExamen = express.Router();
@@ -19,6 +20,14 @@ routerExamen.get("/examenes", async (req, res) => {
 routerExamen.get("/listar/examenes", async (req, res) => {
   try {
     const examenes = await listarExamenes();
+    res.status(200).json(examenes);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+routerExamen.get("/listar/examenes/activos", async (req, res) => {
+  try {
+    const examenes = await listarExamenesActivos();
     res.status(200).json(examenes);
   } catch (error) {
     res.status(500).json(error);

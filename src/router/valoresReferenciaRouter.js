@@ -24,6 +24,17 @@ valoresReferenciaRouter.get("/listar/valoresReferencia", async (req, res) => {
     res.status(500).json(error);
   }
 });
+valoresReferenciaRouter.get(
+  "/listar/valoresReferencia/activos",
+  async (req, res) => {
+    try {
+      const valores = await listarValoresReferenciaActivos();
+      res.status(200).json(valores);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+);
 
 valoresReferenciaRouter.post("/agregar/valoresReferencia", async (req, res) => {
   try {
