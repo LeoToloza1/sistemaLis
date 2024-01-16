@@ -9,7 +9,6 @@ import {
   listarAnalisis,
   agregarExamenesAOrden,
 } from "../controller/analisisController.js";
-import { fechaResultado } from "../controller/examenController.js";
 import Analisis from "../models/analisis.js";
 export const listarOrden = async function () {
   try {
@@ -65,8 +64,6 @@ export const actualizarOrden = async function (orden) {
     if (columnas > 0) {
       if (orden.id_examen && orden.id_examen.length > 0) {
         for (let idExamen of orden.id_examen) {
-          const tiempo = await fechaResultado(idExamen);
-
           const analisisExistente = await Analisis.findOne({
             where: { id_orden: orden.idOrden, id_examen: idExamen },
           });

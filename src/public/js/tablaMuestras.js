@@ -78,7 +78,8 @@ async function cargarDatosEnTabla() {
       content += `
             <tr>
             <td> ${dato.tipoMuestra.nombre} </td>
-            <td> ${dato.paciente.nombre} ${dato.paciente.apellido}</td>
+            <td>${dato.paciente.nombre} ${dato.paciente.apellido}</br> 
+                  DNI: ${dato.paciente.dni}</td>
             <td> ${dato.id_orden}</td>
             <td> ${dato.usuario || "Administrador"}</td>
             <td><button class="editarMuestra-btn btn btn-success" data-index="${index}"><i class='fa-solid fa-vials'></i></button> </td>

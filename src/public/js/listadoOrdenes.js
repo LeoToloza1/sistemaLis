@@ -102,10 +102,6 @@ const initDataTable = async () => {
   });
   dataTableInit = true;
 };
-/**
- * me quede en la tarea de aviso de fecha de entrega, pero ya esta presente ese dato.
- * voy a evaluar la posibilidad de poder editarlo, segun la fecha del examen
- */
 async function cargarDatosEnTabla() {
   try {
     const { datosOrdenesPorPaciente, examenes, analisis } =
@@ -217,8 +213,6 @@ async function formularioEditarOrden(datosOrden) {
     )
     .join("");
   usuarioSelect.value = datosOrden.id_usuario;
-
-  document.getElementById("fechaResultado").value = datosOrden.fechaResultado;
   document.getElementById("observaciones").value = datosOrden.observaciones;
 
   $("#crearOrdenModal").modal("show");

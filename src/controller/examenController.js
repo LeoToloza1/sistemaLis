@@ -131,16 +131,6 @@ export async function editarExamen(examen, idMuestra, id_determinacion) {
   }
 }
 
-export async function fechaResultado(id_examen) {
-  try {
-    const examenEncontrado = await Examen.findByPk(id_examen);
-    return examenEncontrado.tiempo;
-  } catch (error) {
-    console.error("Error al obtener el tiempo del examen:", error);
-    throw error;
-  }
-}
-
 export const buscarExamenID = async function (id) {
   try {
     const examen = await Examen.findByPk(id);

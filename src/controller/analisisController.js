@@ -32,37 +32,45 @@ export const listarAnalisis = async function () {
     console.log("error al listar los analisis", error);
   }
 };
-export const registrarAnalisis = async function (analisis) {
+async function calcularFechaEntrega(idOrden) {
   try {
-    const nuevoAnalisis = await Analisis.create(analisis);
-    console.log(nuevoAnalisis);
-    const orden = await buscarOrdenID(analisis.id_orden);
+    const orden = await buscarOrdenID(idOrden);
     const analisisOrden = await buscarAnalisisPorOrden(orden.id);
     let maxTiempo = 0;
+
     for (let analisis of analisisOrden) {
       const examen = await buscarExamenID(analisis.id_examen);
       const tiempo = examen.tiempo;
+
       if (tiempo > maxTiempo) {
         maxTiempo = tiempo;
       }
     }
     const ahora = new Date();
     const tiempo = new Date(ahora.getTime() + maxTiempo * 24 * 60 * 60 * 1000);
-    orden.fechaResultados = tiempo;
+    return tiempo;
+  } catch (error) {
+    console.error("Error al calcular la fecha de entrega:", error);
+    throw error;
+  }
+}
+export const registrarAnalisis = async function (analisis) {
+  try {
+    const nuevoAnalisis = await Analisis.create(analisis);
+    console.log(nuevoAnalisis);
+
+    const fechaEntrega = await calcularFechaEntrega(analisis.id_orden);
+    const orden = await buscarOrdenID(analisis.id_orden);
+
+    orden.fechaResultados = fechaEntrega;
     await orden.save();
+
     return nuevoAnalisis;
   } catch (error) {
-    console.log("error al registrar el analisis", error);
+    console.log("error al registrar el análisis", error);
+    throw error;
   }
 };
-
-export async function examenEnUso(idExamen) {
-  const analisis = await Analisis.findAll({
-    where: { id_examen: idExamen },
-  });
-  return analisis.length > 0;
-}
-
 export const editarAnalisis = async function (analisis, idExamen) {
   try {
     if (analisis.id_muestra) {
@@ -82,32 +90,25 @@ export const editarAnalisis = async function (analisis, idExamen) {
     });
     await analisiActualizado.setExamen(examen);
     console.log(analisiActualizado);
-    const analisisOrden = await buscarAnalisisPorOrden(analisis.id_orden);
-    let maxTiempo = 0;
-    for (let analisis of analisisOrden) {
-      const examen = await buscarExamenID(analisis.id_examen);
-      const tiempo = examen.tiempo;
-      if (tiempo > maxTiempo) {
-        maxTiempo = tiempo;
-      }
-    }
-    const ahora = new Date();
-    const fechaResultados = new Date(
-      ahora.getTime() + maxTiempo * 24 * 60 * 60 * 1000
-    );
-    await Orden.update(
-      { fechaResultados: fechaResultados },
-      {
-        where: { id: analisis.id_orden },
-      }
-    );
+
+    const fechaEntrega = await calcularFechaEntrega(analisis.id_orden);
+    const orden = await buscarOrdenID(analisis.id_orden);
+
+    orden.fechaResultados = fechaEntrega;
+    await orden.save();
+
     return analisiActualizado;
   } catch (error) {
     console.error("Error al editar el análisis:", error);
-    return error;
+    throw error;
   }
 };
-
+export async function examenEnUso(idExamen) {
+  const analisis = await Analisis.findAll({
+    where: { id_examen: idExamen },
+  });
+  return analisis.length > 0;
+}
 /**
  * Función para agregar varios exámenes a una orden específica.
  * @param {number} idOrden - El ID de la orden a la que se agregarán los exámenes.
@@ -140,7 +141,6 @@ export const buscarAnalisisID = async function (id) {
     console.log("no se encontro el analisis", error);
   }
 };
-
 export const buscarAnalisisPorOrden = async function (id_orden) {
   try {
     const orden = await Analisis.findAll({

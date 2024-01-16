@@ -54,7 +54,7 @@ export const listarMuestraPorPaciente = async (idPaciente) => {
       include: [
         {
           model: Paciente,
-          attributes: ["nombre", "apellido"],
+          attributes: ["nombre", "apellido", "dni"],
         },
         {
           model: tipoMuestra,
