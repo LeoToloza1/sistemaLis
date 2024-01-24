@@ -3,7 +3,10 @@ import morgan from "morgan";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import multer from "multer"; //cortar y pegar en el controlador y en el router
+import passport from "passport";
 import routerIndex from "./router/indexRouter.js";
+import cookieParser from "cookie-parser";
+import expressSession from "express-session";
 import routerPaciente from "./router/pacienteRouter.js";
 import routerCiudades from "./router/ciudadesRouter.js";
 import routerExamen from "./router/examenRouter.js";
@@ -20,6 +23,17 @@ import routerAnalisis from "./router/analisisRouter.js";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser(process.env.SECRETO));
+app.use(
+  expressSession({
+    secret: process.env.SECRETO,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(morgan("dev"));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

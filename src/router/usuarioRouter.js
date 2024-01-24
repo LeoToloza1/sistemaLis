@@ -7,6 +7,15 @@ const usuarioRouter = express.Router();
 import dotenv from "dotenv";
 dotenv.config();
 
+usuarioRouter.get("/users", async (req, res) => {
+  try {
+    const titulo = process.env.TITULO;
+    res.render("gestionUsuarios.pug", { titulo });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 usuarioRouter.get("/usuarios", async (req, res) => {
   try {
     const usuarios = await listarUsuarios();
@@ -19,6 +28,7 @@ usuarioRouter.get("/usuarios", async (req, res) => {
 usuarioRouter.post("/agregar/usuario", async (req, res) => {
   try {
     const usuario = req.body;
+    console.log("usuario en router->", usuario);
     const nuevoUsuario = await registrarUsuario(usuario);
     // console.log(nuevoPaciente);
     res.status(200).json(nuevoUsuario);

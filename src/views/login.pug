@@ -1,0 +1,38 @@
+include head
+
+div.card.mb-3#fondoLaboratorio
+    h1.card-title.text-center Bienvenido al #{titulo2} 
+        div.container 
+            h4 #{error} 
+            h4 #{mensaje}
+
+    .container.col-auto.mt-4
+        .card.border.border-solid.rounded-3.p-4.mb-4
+            h1 Inicio de Sesión
+            form(action="/" method="POST")
+                .form-group
+                    label.form-label(for="email") Email:
+                    input#email.form-control(type="text" name="username" placeholder="admin@gmail.com")
+
+                .form-group.mt-3
+                    label.form-label(for="password") Contraseña:
+                    input#password.form-control(type="password" name="password")
+
+                .form-group.form-check.form-switch.mt-3
+                    input#mostrarContrasena.form-check-input(type="checkbox" role="switch" aria-describedby="verPass")
+                    div#verPass.text-muted Mostrar contraseña
+
+                .form-group.mt-3
+                    div.row.justify-content-center
+                        .col-6.text-center
+                            button#btnLogin.btn.btn-dark.d-inline-flex.focus-ring(type="submit" role="button") Iniciar sesión
+
+
+                .card.p-1.mb-4.mt-4
+                    label(for="recuperarPass")
+                    button#recuperarPass.btn.btn-primary.mt-2 Recuperar contraseña
+
+
+
+
+script(src="/js/index.js" defer)

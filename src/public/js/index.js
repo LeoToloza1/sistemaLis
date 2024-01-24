@@ -1,6 +1,3 @@
-// Llamar a la función cuando el documento esté listo
-
-// console.log("HOLA MUNDO");
 /*notificaciones*/
 Toastify({
   text: "This is a toast",
@@ -17,15 +14,27 @@ Toastify({
   onClick: function () {}, // Callback after click
 }).showTo;
 
-// $(document).ready(function () {
-//   $("#btnExamenes").on("click", function (event) {
-//     event.preventDefault();
-//     $.get("/examenes", function (data) {
-//       $(".container").html(data);
-//     });
-//   });
-// });
-const botonHome = document.getElementById("btnHome");
-botonHome.addEventListener("click", () => {
-  window.location.href = "/";
+const btnLogin = document.getElementById("btnLogin");
+const inputEmail = document.getElementById("email");
+const inputPass = document.getElementById("password");
+
+btnLogin.addEventListener("click", async () => {
+  if (inputEmail.value == "" || inputPass.value == "") {
+    alert("Ingrese un correo y una contraseña por favor");
+    // } else {
+    //   const datos = {
+    //     email: inputEmail.value,
+    //     password: inputPass.value,
+    //   };
+    //   const response = await fetch("/index", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(datos),
+    //   });
+    //   const res = await response.json();
+    //   if (res.status == "ok") {
+    //   }
+  }
 });

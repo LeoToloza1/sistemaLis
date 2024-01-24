@@ -8,11 +8,11 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                 =  titulo
             ul.navbar-nav.me-auto.mb-2.mb-lg-0
                 li.nav-item
-                    button.btn.btn-link.nav-link.active#btnHome Home
+                    a.btn.btn-link.nav-link#btnHome(href='/index') Home
                 li.nav-item
-                    a.btn.btn-link.nav-link#btnExamenes(aria-current='page' href='/ordenes') Ordenes
+                    a.btn.btn-link.nav-link#btnExamenes(href='/ordenes') Ordenes
                 li.nav-item.dropdown
-                    a.nav-link.dropdown-toggle(href='#' role='button' data-bs-toggle='dropdown' aria-expanded='false') Examenes
+                    a.nav-link.dropdown-toggle(role='button' data-bs-toggle='dropdown' aria-expanded='false') Examenes
                     ul.dropdown-menu
                         li
                             a.dropdown-item#btnExamenes(href='/examenes') Listado de Examenes
@@ -29,4 +29,7 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
                 li.nav-item
                     button.btn.btn-link.nav-link.active(aria-current='page') Notificaciones
                 li.nav-item
-                    button.btn.btn-link.nav-link.active(aria-current='page') Logout
+                    button.btn.btn-link.nav-link.active(href='/') Logout
+
+
+
