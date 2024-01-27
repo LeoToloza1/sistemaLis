@@ -6,14 +6,12 @@ import Ciudad from "../models/ciudad.js";
 import Estados from "../models/estados.js";
 
 async function hashearPass(pass) {
-  if (pass.length < 8) {
-    throw new Error("La contraseña debe tener al menos 8 caracteres");
-  }
   const salt = await bcrypt.genSalt(10);
   return bcrypt.hash(pass, salt);
 }
-export async function comprobarPass(pass, hashPass) {
-  await bcrypt.compare(pass, hashPass);
+
+export async function compararPass(passActual, passHash) {
+  return await bcrypt.compare(passActual, passHash);
 }
 
 const rolesEnum = {
@@ -43,7 +41,6 @@ const UsuarioSchema = z.object({
 
 export const registrarUsuario = async function (usuario) {
   try {
-    console.log("usuario en controlador->", usuario);
     const validatedUsuario = UsuarioSchema.parse(usuario);
     const nuevoPass = await hashearPass(validatedUsuario.password);
     const NuevoUsuario = await Usuario.create({
@@ -59,14 +56,20 @@ export const registrarUsuario = async function (usuario) {
 export const editarUsuario = async function (usuario) {
   try {
     const actualizarUsuario = await Usuario.findByPk(usuario.id);
-
     if (!actualizarUsuario) {
       return { error: "Usuario no encontrado" };
     } else {
       const validatedUsuario = UsuarioSchema.parse(usuario);
-      const resultado = await Usuario.update(validatedUsuario, {
-        where: { id: usuario.id },
-      });
+      const nuevoPass = await hashearPass(validatedUsuario.password);
+      const usuarioEditado = await Usuario.update(
+        {
+          ...validatedUsuario,
+          password: nuevoPass,
+        },
+        {
+          where: { id: usuario.id },
+        }
+      );
       return { mensaje: "Usuario actualizado exitosamente" };
     }
   } catch (error) {

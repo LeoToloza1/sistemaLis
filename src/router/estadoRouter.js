@@ -17,3 +17,6 @@ estadoRouter.get("/estados", async (req, res) => {
 });
 
 export default estadoRouter;
+
+// req.session.usuario = user.dataValues;
+// req.session.variable = "HOLAAAAAAAAAAA";

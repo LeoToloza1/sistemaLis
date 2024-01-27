@@ -22,7 +22,6 @@ routerPaciente.post("/agregar/paciente", async (req, res) => {
   try {
     const paciente = req.body;
     const nuevoPaciente = await registrarPaciente(paciente);
-    // console.log(nuevoPaciente);
     res.status(200).json(nuevoPaciente);
   } catch (error) {
     res.status(500).json(error);
@@ -32,7 +31,6 @@ routerPaciente.post("/agregar/paciente", async (req, res) => {
 routerPaciente.post("/actualizar/paciente/:id", async (req, res) => {
   try {
     const paciente = req.body;
-    // console.log(req.body);
     const pacienteEditado = await editarPaciente(paciente);
     res.status(200).json(pacienteEditado);
   } catch (error) {

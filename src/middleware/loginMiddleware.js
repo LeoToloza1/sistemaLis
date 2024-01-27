@@ -1,30 +1,45 @@
 import {
   buscarUsuario,
   buscarUsuarioPorId,
-  comprobarPass,
+  compararPass,
 } from "../controller/usuarioController.js";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-
+// ✔️ - Funciona
 passport.use(
-  new LocalStrategy(async function (email, password, done) {
+  new LocalStrategy({ usernameField: "email" }, async function (
+    email,
+    password,
+    done
+  ) {
     try {
       const usuario = await buscarUsuario({ email });
-      if (email === usuario.email && password === usuario.password) {
-        return done(null, usuario);
+      if (usuario && email === usuario.email) {
+        if (await compararPass(password, usuario.password)) {
+          return done(null, usuario);
+        } else {
+          return done(null, false, { message: "Credenciales incorrectas" });
+        }
       } else {
-        return done(null, false, { message: "Credenciales incorrectas" });
+        return done(null, false, {
+          message: "Correo electrónico no encontrado",
+        });
       }
     } catch (error) {
       return done(error);
     }
   })
 );
-
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
+// ✔️ - Funciona
+passport.serializeUser(async function (user, done) {
+  try {
+    const usuario = await buscarUsuarioPorId(user.id);
+    done(null, usuario.id);
+  } catch (error) {
+    done(error);
+  }
 });
-
+// ✔️ - Funciona
 passport.deserializeUser(async function (id, done) {
   try {
     const usuario = await buscarUsuarioPorId(id);
@@ -37,7 +52,6 @@ passport.deserializeUser(async function (id, done) {
 // ✔️ - Funciona
 export const autenticado = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
-    console.log(req.body);
     if (err) {
       return next(err);
     }
@@ -55,16 +69,33 @@ export const autenticado = (req, res, next) => {
       if (err) {
         return next(err);
       }
-      return res.redirect("/index");
+      req.session.usuario = user.dataValues;
+      req.session.save(() => {
+        res.redirect("/index");
+      });
     });
   })(req, res, next);
 };
 
 export const ensureAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
-    return next();
+    const usuario = req.session.usuario;
+
+    if (usuario) {
+      if (
+        usuario.permiso >= 1 &&
+        (usuario.rol === "administrador" || usuario.rol === "tecnico")
+      ) {
+        return next();
+      } else {
+        return res
+          .status(403)
+          .send("Acceso prohibido. No tienes permisos suficientes.");
+      }
+    }
   }
-  res.redirect("/login");
+
+  res.redirect("/");
 };
 
 export default { autenticado, ensureAuthenticated };

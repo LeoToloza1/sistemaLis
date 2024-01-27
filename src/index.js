@@ -4,6 +4,7 @@ import path, { dirname } from "path";
 import { fileURLToPath } from "url";
 import multer from "multer"; //cortar y pegar en el controlador y en el router
 import passport from "passport";
+import loginMiddleware from "./middleware/loginMiddleware.js";
 import routerIndex from "./router/indexRouter.js";
 import cookieParser from "cookie-parser";
 import expressSession from "express-session";
@@ -29,8 +30,13 @@ app.use(
     secret: process.env.SECRETO,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000, // 24 horas
+    },
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -41,21 +47,27 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
-//ruteo simple para index - es lo que vera el usuario del sistema
+//ruteo simple para index - es lo que vera el usuario del sistema ✔️
+//ruteo con autenticacion si el usuario ya realizo el login, ✔️
+//empieza la proteccion de rutas...
+
+//TODO - separar en rutas comunes para consumo de datos o renderizado de vistas
+//TODO - separar en rutas privadas para cada tipo de usuario y nivel de acceso
+
 app.use("/", routerIndex);
-app.use("/", routerPaciente);
-app.use("/", routerCiudades);
-app.use("/", routerExamen);
-app.use("/", usuarioRouter);
-app.use("/", estadoRouter);
-app.use("/", determinacionRouter);
-app.use("/", valoresReferenciaRouter);
-app.use("/", routerTipoMuestra);
-app.use("/", routerUnidadMedida);
-app.use("/", ordenRouter);
-app.use("/", routerDiagnostico);
-app.use("/", muestrasRouter);
-app.use("/", routerAnalisis);
+app.use("/", loginMiddleware.ensureAuthenticated, routerPaciente);
+app.use("/", loginMiddleware.ensureAuthenticated, routerCiudades);
+app.use("/", loginMiddleware.ensureAuthenticated, routerExamen);
+app.use("/", loginMiddleware.ensureAuthenticated, usuarioRouter);
+app.use("/", loginMiddleware.ensureAuthenticated, estadoRouter);
+app.use("/", loginMiddleware.ensureAuthenticated, determinacionRouter);
+app.use("/", loginMiddleware.ensureAuthenticated, valoresReferenciaRouter);
+app.use("/", loginMiddleware.ensureAuthenticated, routerTipoMuestra);
+app.use("/", loginMiddleware.ensureAuthenticated, routerUnidadMedida);
+app.use("/", loginMiddleware.ensureAuthenticated, ordenRouter);
+app.use("/", loginMiddleware.ensureAuthenticated, routerDiagnostico);
+app.use("/", loginMiddleware.ensureAuthenticated, muestrasRouter);
+app.use("/", loginMiddleware.ensureAuthenticated, routerAnalisis);
 /*
  * de aca para abajo hay que sacar todo
  */

@@ -110,8 +110,10 @@ async function formularioUsuario() {
 }
 
 async function formularioEditarUsuario(dato) {
+  actualizar = true;
   document.querySelector(".modal-title").textContent = "Editar Usuario";
   const { ciudades, estados } = await obtenerDatos();
+  document.getElementById("idUsuario").value = dato.id;
   document.getElementById("nombre").value = dato.nombre;
   document.getElementById("apellido").value = dato.apellido;
   document.getElementById("direccion").value = dato.direccion;
@@ -164,17 +166,17 @@ async function guardarUsuario() {
   const nombre = document.getElementById("nombre").value;
   const apellido = document.getElementById("apellido").value;
   const direccion = document.getElementById("direccion").value;
-  const estadoSelect = document.getElementById("id_estado");
+  const estadoSelect = document.getElementById("estado");
   const id_estado = Number(
-    estadoSelect.options[estadoSelect.selectedIndex].value
+    estadoSelect.option[estadoSelect.selectedIndex].value
   );
   const ciudadesSelect = document.getElementById("ciudad");
   const id_ciudad = Array.from(ciudadesSelect.selectedOptions).map((option) =>
     Number(option.value)
   );
   const email = document.getElementById("email").value;
-  const confirmPassword = document.getElementById("password2").value;
   const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("password2").value;
   const rol = document.getElementById("rol").value;
   const permiso = document.getElementById("permiso").value;
   const telefono = Number(document.getElementById("telefono").value);
@@ -182,7 +184,10 @@ async function guardarUsuario() {
   const dni = document.getElementById("dni").value;
   if (password !== confirmPassword) {
     alert("Las contraseñas no coinciden. Por favor, inténtalo de nuevo.");
-    return; //esto deteiene la ejecucion para guardar usuario
+    return; //esto detiene la ejecución para editar usuario
+  } else if (password.length < 8) {
+    alert("La contraseña debe tener al menos 8 caracteres.");
+    return;
   }
 
   const usuario = {
@@ -199,8 +204,6 @@ async function guardarUsuario() {
     nacimiento,
     dni,
   };
-  console.log("usuario en el cliente ->", usuario);
-  //   console.log(typeof permiso);
   try {
     const respuesta = await fetch("/agregar/usuario", {
       method: "POST",
@@ -216,10 +219,76 @@ async function guardarUsuario() {
     console.error("Error en la solicitud:", error);
   }
 }
+const idUsuario = document.getElementById("idUsuario").value;
+async function editarUsuario(idUsuario) {
+  const nombre = document.getElementById("nombre").value;
+  const apellido = document.getElementById("apellido").value;
+  const direccion = document.getElementById("direccion").value;
+  const estadoSelect = document.getElementById("estado");
+  const id_estado = Number(
+    estadoSelect.options[estadoSelect.selectedIndex].value
+  );
+  const ciudadesSelect = document.getElementById("ciudad");
+  const id_ciudad = Array.from(ciudadesSelect.selectedOptions).map((option) =>
+    Number(option.value)
+  );
+  const email = document.getElementById("email").value;
+  const confirmPassword = document.getElementById("password2").value;
+  const password = document.getElementById("password").value;
+  const rol = document.getElementById("rol").value;
+  const permiso = document.getElementById("permiso").value;
+  const telefono = Number(document.getElementById("telefono").value);
+  const nacimiento = document.getElementById("nacimiento").value;
+  const dni = document.getElementById("dni").value;
+
+  if (password !== confirmPassword) {
+    alert("Las contraseñas no coinciden. Por favor, inténtalo de nuevo.");
+    return; //esto detiene la ejecución para editar usuario
+  } else if (password.length < 8) {
+    alert("La contraseña debe tener al menos 8 caracteres.");
+    return;
+  }
+
+  const usuario = {
+    id: idUsuario,
+    nombre,
+    apellido,
+    direccion,
+    id_estado,
+    id_ciudad,
+    email,
+    password,
+    rol,
+    permiso,
+    telefono,
+    nacimiento,
+    dni,
+  };
+
+  try {
+    const respuesta = await fetch(`/actualizar/usuario/${idUsuario}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(usuario),
+    });
+    if (respuesta.ok) {
+      alert("Usuario editado con éxito");
+      initDataTable();
+      $("#formularioUsuario").modal("hide");
+    } else {
+      console.error("Error en la solicitud:", await respuesta.text());
+    }
+  } catch (error) {
+    console.error("Error en la solicitud:", error);
+  }
+}
 
 $(function () {
   initDataTable();
 });
+
 function reiniciarFormulario() {
   document.getElementById("nombre").value = "";
   document.getElementById("apellido").value = "";

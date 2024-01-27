@@ -27,8 +27,7 @@ routerIndex.get("/", async (req, res) => {
 routerIndex.post("/", loginMiddleware.autenticado, (req, res, next) => {
   try {
     const titulo = process.env.TITULO || "Sistema de Laboratorio";
-    const titulo2 = process.env.TITULO2;
-    res.render("gestionPacientes.pug", { titulo2 });
+    res.render("/index", { titulo });
   } catch (error) {
     res.status(500).json(error);
   }
@@ -37,10 +36,9 @@ routerIndex.post("/", loginMiddleware.autenticado, (req, res, next) => {
 //sesion ya iniciada
 routerIndex.get("/index", async (req, res) => {
   try {
-    //sesion ya iniciada
+    console.log(req.session.usuario.rol);
     const titulo = process.env.TITULO || "Sistema de Laboratorio";
     res.render("gestionPacientes.pug", { titulo });
-    //sesion no iniciada
   } catch (error) {
     res.status(500).json(error);
   }

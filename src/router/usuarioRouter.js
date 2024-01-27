@@ -1,4 +1,5 @@
 import {
+  editarUsuario,
   listarUsuarios,
   registrarUsuario,
 } from "../controller/usuarioController.js";
@@ -25,12 +26,19 @@ usuarioRouter.get("/usuarios", async (req, res) => {
   }
 });
 
+usuarioRouter.post("/actualizar/usuario/:id", async (req, res) => {
+  try {
+    const usuario = req.body;
+    const usuarioEditado = await editarUsuario(usuario);
+    res.status(200).json(usuarioEditado);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 usuarioRouter.post("/agregar/usuario", async (req, res) => {
   try {
     const usuario = req.body;
-    console.log("usuario en router->", usuario);
     const nuevoUsuario = await registrarUsuario(usuario);
-    // console.log(nuevoPaciente);
     res.status(200).json(nuevoUsuario);
   } catch (error) {
     res.status(500).json(error);

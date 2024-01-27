@@ -21,20 +21,20 @@ const inputPass = document.getElementById("password");
 btnLogin.addEventListener("click", async () => {
   if (inputEmail.value == "" || inputPass.value == "") {
     alert("Ingrese un correo y una contraseña por favor");
-    // } else {
-    //   const datos = {
-    //     email: inputEmail.value,
-    //     password: inputPass.value,
-    //   };
-    //   const response = await fetch("/index", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(datos),
-    //   });
-    //   const res = await response.json();
-    //   if (res.status == "ok") {
-    //   }
   }
+  // } else {
+  //   const datos = {
+  //     email: inputEmail.value,
+  //     password: inputPass.value,
+  //   };
+  //   const response = await fetch("/index", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(datos),
+  //   });
+  //   const res = await response.json();
+  //   if (res.status == "ok") {
+  //   }
 });
