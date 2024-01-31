@@ -1,3 +1,6 @@
+/**
+ * imporacion de dependencias:
+ */
 import express from "express";
 import morgan from "morgan";
 import path, { dirname } from "path";
@@ -21,8 +24,20 @@ import ordenRouter from "./router/ordenRouter.js";
 import routerDiagnostico from "./router/diagnosticoRouter.js";
 import muestrasRouter from "./router/muestrasRouter.js";
 import routerAnalisis from "./router/analisisRouter.js";
-
+import { configureSocket } from "./configSocket.js";
+import http from "http";
+import cors from "cors";
+/**
+ * configuarcion de express y socket io
+ */
 const app = express();
+const server = http.createServer(app);
+const io = configureSocket(server);
+/**
+ * configuracion de middlewares de express
+ * express-session
+ */
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.SECRETO));
@@ -37,21 +52,24 @@ app.use(
     },
   })
 );
-
+/**
+ * configuaracion de passport
+ */
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(morgan("dev"));
+/**
+ * configuracion de pug y carpeta public
+ */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
-//empieza la proteccion de rutas...
-
-//TODO - separar en rutas comunes para consumo de datos o renderizado de vistas
-//TODO - separar en rutas privadas para cada tipo de usuario y nivel de acceso
-
+/**
+ * rutas
+ */
 app.use("/", routerIndex);
 app.use("/", loginMiddleware.ensureAuthenticated, routerPaciente);
 app.use("/", loginMiddleware.ensureAuthenticated, routerCiudades);
@@ -67,7 +85,7 @@ app.use("/", loginMiddleware.ensureAuthenticated, routerDiagnostico);
 app.use("/", loginMiddleware.ensureAuthenticated, muestrasRouter);
 app.use("/", loginMiddleware.ensureAuthenticated, routerAnalisis);
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   console.log(`Corriendo en el puerto: ${process.env.PORT}`);
 });
 

@@ -47,12 +47,6 @@ usuarioRouter.post("/agregar/usuario", async (req, res) => {
   try {
     const usuario = req.body;
     const nuevoUsuario = await registrarUsuario(usuario);
-    if (nuevoUsuario.error === "El correo electrónico ya está en uso") {
-      return res
-        .status(400)
-        .json({ error: "El correo electrónico ya está en uso" });
-    }
-    // Resto del código si no hay error
     res.status(200).json(nuevoUsuario);
   } catch (error) {
     res.status(500).json({ error: error.message });
