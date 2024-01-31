@@ -9,7 +9,7 @@ import express from "express";
 const ordenRouter = express.Router();
 import dotenv from "dotenv";
 dotenv.config();
-
+//permiso de usuario normal ✔️
 ordenRouter.get("/ordenes", async (req, res) => {
   try {
     const titulo = process.env.TITULO || "Sistema de Laboratorio";
@@ -18,7 +18,7 @@ ordenRouter.get("/ordenes", async (req, res) => {
     res.status(500).json(error);
   }
 });
-
+//permiso de usuario normal ✔️
 ordenRouter.get("/listar/ordenes", async (req, res) => {
   try {
     const orden = await listarOrden();
@@ -30,6 +30,7 @@ ordenRouter.get("/listar/ordenes", async (req, res) => {
 /**
  * este envia la vista listadoOrdenes.pug
  */
+//permiso de usuario normal ✔️
 ordenRouter.get("/listar/ordenes/paciente/:id", async (req, res) => {
   try {
     const titulo = process.env.TITULO || "Sistema de Laboratorio";
@@ -45,6 +46,7 @@ ordenRouter.get("/listar/ordenes/paciente/:id", async (req, res) => {
 /**
  * este lista las ordenes y devuelve un json
  */
+//permiso de usuario normal ✔️
 ordenRouter.get("/listar/orden/paciente/:id", async (req, res) => {
   try {
     const paciente = req.params.id;
@@ -55,7 +57,7 @@ ordenRouter.get("/listar/orden/paciente/:id", async (req, res) => {
     res.status(500).send("Hubo un error al procesar tu solicitud.");
   }
 });
-
+//permiso de usuario normal ✔️
 ordenRouter.post("/agregar/orden/paciente", async (req, res) => {
   try {
     const orden = req.body;
@@ -66,7 +68,7 @@ ordenRouter.post("/agregar/orden/paciente", async (req, res) => {
     res.status(500).json({ error: "Hubo un error al procesar tu solicitud." });
   }
 });
-
+//permiso de usuario normal ✔️
 ordenRouter.post("/actualizar/orden/paciente/:id", async (req, res) => {
   try {
     const orden = req.body;

@@ -5,10 +5,11 @@ import {
 } from "../controller/tipoMuestraController.js";
 import express from "express";
 const routerTipoMuestra = express.Router();
+import { permisoProfesional } from "../middleware/loginMiddleware.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-routerTipoMuestra.get("/tipoMuestra", async (req, res) => {
+routerTipoMuestra.get("/tipoMuestra", permisoProfesional, async (req, res) => {
   try {
     const titulo = process.env.TITULO || "Sistema de Laboratorio";
     res.render("gestionTiposMuestras", { titulo });
@@ -16,6 +17,7 @@ routerTipoMuestra.get("/tipoMuestra", async (req, res) => {
     res.status(500).json(error);
   }
 });
+
 routerTipoMuestra.get("/listar/tipoMuestra", async (req, res) => {
   try {
     const tiposMuestra = await listarTipoMuestra();

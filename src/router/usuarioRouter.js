@@ -4,11 +4,12 @@ import {
   registrarUsuario,
 } from "../controller/usuarioController.js";
 import express from "express";
+import { permisoAdmin } from "../middleware/loginMiddleware.js";
 const usuarioRouter = express.Router();
 import dotenv from "dotenv";
 dotenv.config();
 
-usuarioRouter.get("/users", async (req, res) => {
+usuarioRouter.get("/users", permisoAdmin, async (req, res) => {
   try {
     const titulo = process.env.TITULO;
     res.render("gestionUsuarios.pug", { titulo });
@@ -35,13 +36,26 @@ usuarioRouter.post("/actualizar/usuario/:id", async (req, res) => {
     res.status(500).json(error);
   }
 });
+
+/**
+ * chequear este router para evitar que ingresen 2 veces el mismo mail
+ */
+/**
+ * no redirecciona a la pagina /error ni corta la ejecucion
+ */
 usuarioRouter.post("/agregar/usuario", async (req, res) => {
   try {
     const usuario = req.body;
     const nuevoUsuario = await registrarUsuario(usuario);
+    if (nuevoUsuario.error === "El correo electrónico ya está en uso") {
+      return res
+        .status(400)
+        .json({ error: "El correo electrónico ya está en uso" });
+    }
+    // Resto del código si no hay error
     res.status(200).json(nuevoUsuario);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ error: error.message });
   }
 });
 

@@ -1,0 +1,20 @@
+//- acceso denegado
+include head
+
+body
+    header
+        nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+            .container-fluid
+                button.navbar-toggler(type='button' data-bs-toggle='collapse' data-bs-target='#navbarTogglerDemo01' aria-controls='navbarTogglerDemo01' aria-expanded='false' aria-label='Toggle navigation')
+                    span.navbar-toggler-icon
+                .collapse.navbar-collapse#navbarTogglerDemo01
+                    a.navbar-brand(href='/index')
+                        img(src='https://lh3.googleusercontent.com/p/AF1QipM6SIqCsJt40FvseXhXD20rYDT3GKuxPztvh0X_=w768-h768-n-o-v1' alt='' width='30' height='24' class='d-inline-block align-text-top me-3')
+                        | #{titulo}
+
+    main.container.mt-5.text-center
+        h1.error-title ¡Acceso Denegado!
+        p.error-message No estás autorizado para acceder a esta página. Por favor, contacta al administrador del sistema.
+
+    footer.footer.mt-5.text-center
+        p © 2024 SISTEMA LIS

@@ -1,0 +1,20 @@
+.container-fluid
+    .rounded.shadow
+        div
+            button#toggleChat.btn.btn-dark Chat Interno
+        #chatBox.container
+            div
+                p usuario: #{usuarioInfo.nombre}
+                input(type="text" placeholder="escriba su mensaje")
+
+    footer.container.text-center.mt-3
+    p © 2024 SISTEMA LIS
+
+
+script.
+    $(document).ready(function() {
+        $("#chatBox").hide();
+        $("#toggleChat").click(function() {
+            $("#chatBox").toggle();
+        });
+    });

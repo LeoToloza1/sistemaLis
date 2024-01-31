@@ -43,6 +43,14 @@ export const registrarUsuario = async function (usuario) {
   try {
     const validatedUsuario = UsuarioSchema.parse(usuario);
     const nuevoPass = await hashearPass(validatedUsuario.password);
+    const usuarioExistente = await Usuario.findOne({
+      where: {
+        email: validatedUsuario.email,
+      },
+    });
+    if (usuarioExistente) {
+      return { error: "El correo electrónico ya está en uso" };
+    }
     const NuevoUsuario = await Usuario.create({
       ...validatedUsuario,
       password: nuevoPass,
@@ -53,6 +61,7 @@ export const registrarUsuario = async function (usuario) {
     return { error: error.message };
   }
 };
+
 export const editarUsuario = async function (usuario) {
   try {
     const actualizarUsuario = await Usuario.findByPk(usuario.id);

@@ -163,48 +163,49 @@ function guardar_actualizarUsuario() {
   }
 }
 async function guardarUsuario() {
-  const nombre = document.getElementById("nombre").value;
-  const apellido = document.getElementById("apellido").value;
-  const direccion = document.getElementById("direccion").value;
-  const estadoSelect = document.getElementById("estado");
-  const id_estado = Number(
-    estadoSelect.option[estadoSelect.selectedIndex].value
-  );
-  const ciudadesSelect = document.getElementById("ciudad");
-  const id_ciudad = Array.from(ciudadesSelect.selectedOptions).map((option) =>
-    Number(option.value)
-  );
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("password2").value;
-  const rol = document.getElementById("rol").value;
-  const permiso = document.getElementById("permiso").value;
-  const telefono = Number(document.getElementById("telefono").value);
-  const nacimiento = document.getElementById("nacimiento").value;
-  const dni = document.getElementById("dni").value;
-  if (password !== confirmPassword) {
-    alert("Las contraseñas no coinciden. Por favor, inténtalo de nuevo.");
-    return; //esto detiene la ejecución para editar usuario
-  } else if (password.length < 8) {
-    alert("La contraseña debe tener al menos 8 caracteres.");
-    return;
-  }
-
-  const usuario = {
-    nombre,
-    apellido,
-    direccion,
-    id_estado,
-    id_ciudad,
-    email,
-    password,
-    rol,
-    permiso,
-    telefono,
-    nacimiento,
-    dni,
-  };
   try {
+    const nombre = document.getElementById("nombre").value;
+    const apellido = document.getElementById("apellido").value;
+    const direccion = document.getElementById("direccion").value;
+    const estadoSelect = document.getElementById("estado");
+    const id_estado = Number(
+      estadoSelect.options[estadoSelect.selectedIndex].value
+    );
+    const ciudadesSelect = document.getElementById("ciudad");
+    const id_ciudad = Array.from(ciudadesSelect.selectedOptions).map((option) =>
+      Number(option.value)
+    );
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("password2").value;
+    const rol = document.getElementById("rol").value;
+    const permiso = document.getElementById("permiso").value;
+    const telefono = Number(document.getElementById("telefono").value);
+    const nacimiento = document.getElementById("nacimiento").value;
+    const dni = document.getElementById("dni").value;
+    if (password !== confirmPassword) {
+      alert("Las contraseñas no coinciden. Por favor, inténtalo de nuevo.");
+      return; //esto detiene la ejecución para editar usuario
+    } else if (password.length < 8) {
+      alert("La contraseña debe tener al menos 8 caracteres.");
+      return;
+    }
+
+    const usuario = {
+      nombre,
+      apellido,
+      direccion,
+      id_estado,
+      id_ciudad,
+      email,
+      password,
+      rol,
+      permiso,
+      telefono,
+      nacimiento,
+      dni,
+    };
+
     const respuesta = await fetch("/agregar/usuario", {
       method: "POST",
       headers: {
@@ -228,6 +229,7 @@ async function editarUsuario(idUsuario) {
   const id_estado = Number(
     estadoSelect.options[estadoSelect.selectedIndex].value
   );
+
   const ciudadesSelect = document.getElementById("ciudad");
   const id_ciudad = Array.from(ciudadesSelect.selectedOptions).map((option) =>
     Number(option.value)
@@ -301,9 +303,3 @@ function reiniciarFormulario() {
   document.getElementById("nacimiento").value = "";
   document.getElementById("dni").value = "";
 }
-// {
-//   /* <button class="orden-btn btn btn-dark" data-index="${index}"><i class='fa-solid fa-file-contract'></i></button> */
-// }
-// {
-//   /* <button class="muestra-btn btn btn-dark" data-index="${index}"> <i class='fa-solid fa-vials'></i></button> */
-// }

@@ -4,12 +4,13 @@ import {
   registrarExamen,
   listarExamenesActivos,
 } from "../controller/examenController.js";
+import { permisoProfesional } from "../middleware/loginMiddleware.js";
 import express from "express";
 const routerExamen = express.Router();
 import dotenv from "dotenv";
 dotenv.config();
 
-routerExamen.get("/examenes", async (req, res) => {
+routerExamen.get("/examenes", permisoProfesional, async (req, res) => {
   try {
     const titulo = process.env.TITULO || "Sistema de Laboratorio";
     res.render("gestionExamenes.pug", { titulo });
@@ -17,7 +18,7 @@ routerExamen.get("/examenes", async (req, res) => {
     res.status(500).json(error);
   }
 });
-routerExamen.get("/listar/examenes", async (req, res) => {
+routerExamen.get("/listar/examenes", permisoProfesional, async (req, res) => {
   try {
     const examenes = await listarExamenes();
     res.status(200).json(examenes);
@@ -25,6 +26,7 @@ routerExamen.get("/listar/examenes", async (req, res) => {
     res.status(500).json(error);
   }
 });
+
 routerExamen.get("/listar/examenes/activos", async (req, res) => {
   try {
     const examenes = await listarExamenesActivos();

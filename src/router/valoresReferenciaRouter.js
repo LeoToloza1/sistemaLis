@@ -2,20 +2,26 @@ import {
   actualizarValorReferencia,
   agregarValorReferencia,
   listarValoresReferencia,
+  listarValoresReferenciaActivos,
 } from "../controller/valoresReferenciaController.js";
 import express from "express";
 const valoresReferenciaRouter = express.Router();
+import { permisoProfesional } from "../middleware/loginMiddleware.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-valoresReferenciaRouter.get("/valoresReferencia", async (req, res) => {
-  try {
-    const titulo = process.env.TITULO || "Sistema de Laboratorio";
-    res.render("gestionValoresReferencia", { titulo });
-  } catch (error) {
-    res.status(500).json(error);
+valoresReferenciaRouter.get(
+  "/valoresReferencia",
+  permisoProfesional,
+  async (req, res) => {
+    try {
+      const titulo = process.env.TITULO || "Sistema de Laboratorio";
+      res.render("gestionValoresReferencia", { titulo });
+    } catch (error) {
+      res.status(500).json(error);
+    }
   }
-});
+);
 valoresReferenciaRouter.get("/listar/valoresReferencia", async (req, res) => {
   try {
     const valores = await listarValoresReferencia();

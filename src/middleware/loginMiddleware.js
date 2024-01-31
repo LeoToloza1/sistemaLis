@@ -1,3 +1,10 @@
+/*
+ * referencias:
+ * ✔️ - Finalizado
+ * ⏳ - En proceso
+ * ❌ - No realizado
+ * ⚡ - urgente
+ */
 import {
   buscarUsuario,
   buscarUsuarioPorId,
@@ -76,26 +83,41 @@ export const autenticado = (req, res, next) => {
     });
   })(req, res, next);
 };
-
+// ✔️ - Funciona
 export const ensureAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
-    const usuario = req.session.usuario;
-
-    if (usuario) {
-      if (
-        usuario.permiso >= 1 &&
-        (usuario.rol === "administrador" || usuario.rol === "tecnico")
-      ) {
-        return next();
-      } else {
-        return res
-          .status(403)
-          .send("Acceso prohibido. No tienes permisos suficientes.");
-      }
-    }
+    return next();
   }
-
   res.redirect("/");
 };
+/**
+ * simplificar y trabajar en los permisos
+ */
+// Middleware para administradores
+export const permisoAdmin = (req, res, next) => {
+  const rol = req.session.usuario.rol;
+  if (rol !== "administrador") {
+    console.log(`Acceso denegado porque es ${rol}`);
+    return res.redirect("/accesoDenegado");
+  }
+  console.log(`Acceso completo porque es ${rol}`);
+  return next();
+};
 
-export default { autenticado, ensureAuthenticated };
+// Middleware para prefesionales
+export const permisoProfesional = (req, res, next) => {
+  const rol = req.session.usuario.rol;
+  if (rol !== "tecnico" && rol !== "bioquimico" && rol !== "administrador") {
+    console.log(`Acceso denegado porque es ${rol}`);
+    return res.redirect("/accesoDenegado");
+  }
+  console.log(`Acceso parcial porque es ${rol}`);
+  return next();
+};
+
+export default {
+  autenticado,
+  ensureAuthenticated,
+  permisoAdmin,
+  permisoProfesional,
+};

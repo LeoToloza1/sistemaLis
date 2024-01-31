@@ -159,7 +159,7 @@ async function formularioOrden() {
     .map((examen) => `<option value="${examen.id}">${examen.nombre}</option>`)
     .join("");
   const muestraSelect = document.getElementById("id_muestra");
-  muestraSelect.innerHTML = muestra
+  muestraSelect.innerHTML += muestra
     .map(
       (muestra) =>
         `<option value="${muestra.id}">${muestra.tipoMuestra.nombre}</option>`
@@ -351,7 +351,6 @@ $(function () {
 function reiniciarFormulario() {
   document.getElementById("idOrden").value = "";
   document.getElementById("id_estado").value = "";
-  document.getElementById("fechaResultado").value = "";
   document.getElementById("id_diagnostico").value = "";
   document.getElementById("observaciones").value = "";
   document.getElementById("id_examen").value = "";

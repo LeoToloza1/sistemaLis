@@ -21,6 +21,7 @@ import ordenRouter from "./router/ordenRouter.js";
 import routerDiagnostico from "./router/diagnosticoRouter.js";
 import muestrasRouter from "./router/muestrasRouter.js";
 import routerAnalisis from "./router/analisisRouter.js";
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,7 +40,6 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(morgan("dev"));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,8 +47,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "views"));
 
-//ruteo simple para index - es lo que vera el usuario del sistema ✔️
-//ruteo con autenticacion si el usuario ya realizo el login, ✔️
 //empieza la proteccion de rutas...
 
 //TODO - separar en rutas comunes para consumo de datos o renderizado de vistas
@@ -68,6 +66,13 @@ app.use("/", loginMiddleware.ensureAuthenticated, ordenRouter);
 app.use("/", loginMiddleware.ensureAuthenticated, routerDiagnostico);
 app.use("/", loginMiddleware.ensureAuthenticated, muestrasRouter);
 app.use("/", loginMiddleware.ensureAuthenticated, routerAnalisis);
+
+app.listen(process.env.PORT, () => {
+  console.log(`Corriendo en el puerto: ${process.env.PORT}`);
+});
+
+export default app;
+
 /*
  * de aca para abajo hay que sacar todo
  */
@@ -95,9 +100,3 @@ app.use("/", loginMiddleware.ensureAuthenticated, routerAnalisis);
 
 // // Para servir las imágenes subidas
 // app.use("/uploads", express.static("uploads"));
-
-app.listen(process.env.PORT, () => {
-  console.log(`Corriendo en el puerto: ${process.env.PORT}`);
-});
-
-export default app;
