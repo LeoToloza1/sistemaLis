@@ -1,20 +1,16 @@
 .container-fluid
-    .rounded.shadow
-        div
-            button#toggleChat.btn.btn-dark Chat Interno
-        #chatBox.container
-            div
-                p usuario: #{usuarioInfo.nombre}
-                input(type="text" placeholder="escriba su mensaje")
+    .rounded.shadow#chatContainer.fixed-bottom
+        button#toggleChat.btn.btn-dark Chat Interno
+            span.contador.ms-1.rounded
+        #chatBox.container.form-control
+            .chat
+                p#usuario Usuario: #{usuarioInfo.nombre}
+                div#recibido.container
+                input#mensaje(type="text" placeholder="Escriba su mensaje")
+                button#enviarMensaje.btn.btn-primary.ms-2 Enviar
+                span.emoji 😊
 
-    footer.container.text-center.mt-3
-    p © 2024 SISTEMA LIS
+footer.container.text-center.mt-3
+    p © #{titulo}
 
-
-script.
-    $(document).ready(function() {
-        $("#chatBox").hide();
-        $("#toggleChat").click(function() {
-            $("#chatBox").toggle();
-        });
-    });
+script(src="/js/index.js")

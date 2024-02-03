@@ -16,7 +16,14 @@ valoresReferenciaRouter.get(
   async (req, res) => {
     try {
       const titulo = process.env.TITULO || "Sistema de Laboratorio";
-      res.render("gestionValoresReferencia", { titulo });
+      const usuarioInfo = {
+        nombre: req.isAuthenticated() ? req.session.usuario.nombre : null,
+        rol: req.isAuthenticated() ? req.session.usuario.rol : null,
+      };
+      if (!req.isAuthenticated()) {
+        return res.redirect("/");
+      }
+      res.render("gestionValoresReferencia", { titulo, usuarioInfo });
     } catch (error) {
       res.status(500).json(error);
     }

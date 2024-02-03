@@ -13,7 +13,14 @@ dotenv.config();
 ordenRouter.get("/ordenes", async (req, res) => {
   try {
     const titulo = process.env.TITULO || "Sistema de Laboratorio";
-    res.render("gestionOrdenes", { titulo });
+    const usuarioInfo = {
+      nombre: req.isAuthenticated() ? req.session.usuario.nombre : null,
+      rol: req.isAuthenticated() ? req.session.usuario.rol : null,
+    };
+    if (!req.isAuthenticated()) {
+      return res.redirect("/");
+    }
+    res.render("gestionOrdenes", { titulo, usuarioInfo });
   } catch (error) {
     res.status(500).json(error);
   }
@@ -37,7 +44,14 @@ ordenRouter.get("/listar/ordenes/paciente/:id", async (req, res) => {
     const paciente = req.params.id;
     const orden = await listarOrdenPorUsuario(paciente);
     const pacienteEncontrado = await buscarPaciente(paciente);
-    res.render("listadoOrdenes", { pacienteEncontrado, titulo });
+    const usuarioInfo = {
+      nombre: req.isAuthenticated() ? req.session.usuario.nombre : null,
+      rol: req.isAuthenticated() ? req.session.usuario.rol : null,
+    };
+    if (!req.isAuthenticated()) {
+      return res.redirect("/");
+    }
+    res.render("listadoOrdenes", { pacienteEncontrado, titulo, usuarioInfo });
   } catch (error) {
     console.error("Error al listar las ordenes desde el router -->", error);
     res.status(500).send("Hubo un error al procesar tu solicitud.");

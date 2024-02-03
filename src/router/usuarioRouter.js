@@ -11,8 +11,15 @@ dotenv.config();
 
 usuarioRouter.get("/users", permisoAdmin, async (req, res) => {
   try {
-    const titulo = process.env.TITULO;
-    res.render("gestionUsuarios.pug", { titulo });
+    const titulo = process.env.TITULO || "Sistema de Laboratorio";
+    const usuarioInfo = {
+      nombre: req.isAuthenticated() ? req.session.usuario.nombre : null,
+      rol: req.isAuthenticated() ? req.session.usuario.rol : null,
+    };
+    if (!req.isAuthenticated()) {
+      return res.redirect("/");
+    }
+    res.render("gestionUsuarios.pug", { titulo, usuarioInfo });
   } catch (error) {
     res.status(500).json(error);
   }

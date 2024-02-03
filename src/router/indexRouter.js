@@ -86,7 +86,6 @@ export default routerIndex;
 routerIndex.get("/error", async (req, res) => {
   try {
     const titulo = process.env.TITULO || "Sistema de Laboratorio";
-    console.log(req.session.error);
     res.render("error.pug", { titulo, error: req.session.error });
   } catch (error) {
     res.status(500).json(error);

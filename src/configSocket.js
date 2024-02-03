@@ -5,13 +5,12 @@ export const configureSocket = (server) => {
   const io = new Server(server);
 
   io.on("connection", (socket) => {
-    console.log("Usuario conectado");
-
     // Escuchar mensajes del cliente
-    socket.on("chat message", (msg) => {
-      console.log("Mensaje del cliente:", msg);
+    socket.on("chat", (mensaje) => {
+      console.log(mensaje.usuario);
 
-      // Puedes emitir mensajes de vuelta al cliente o hacer cualquier otra lógica aquí
+      // Emitir el mensaje a todos los clientes excepto al remitente
+      socket.broadcast.emit("chat", mensaje);
     });
 
     // Ejemplo: Enviar notificación a todos los clientes

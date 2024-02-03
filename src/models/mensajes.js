@@ -26,7 +26,7 @@ Mensaje.init(
     sequelize: Conexion.sequelize,
     modelName: "Mensaje",
     tableName: "mensaje",
-    timestamps: true,
+    timestamps: false,
   }
 );
 

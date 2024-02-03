@@ -20,8 +20,14 @@ muestraRouter.get("/muestras/paciente/:id", async (req, res) => {
     const titulo = process.env.TITULO || "Sistema de Laboratorio";
     const paciente = req.params.id;
     const pacienteEncontrado = await buscarPaciente(paciente);
-    // const muestras = await listarMuestraPorPaciente(paciente);
-    res.render("gestionMuestras", { titulo, pacienteEncontrado });
+    const usuarioInfo = {
+      nombre: req.isAuthenticated() ? req.session.usuario.nombre : null,
+      rol: req.isAuthenticated() ? req.session.usuario.rol : null,
+    };
+    if (!req.isAuthenticated()) {
+      return res.redirect("/");
+    }
+    res.render("gestionMuestras", { titulo, pacienteEncontrado, usuarioInfo });
   } catch (error) {
     res.status(500).json(error);
   }

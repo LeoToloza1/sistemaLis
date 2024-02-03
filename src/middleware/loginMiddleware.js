@@ -10,6 +10,7 @@ import {
   buscarUsuarioPorId,
   compararPass,
 } from "../controller/usuarioController.js";
+import { obtenerMensajes } from "../controller/mensajeController.js";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 // ✔️ - Funciona
@@ -73,11 +74,12 @@ export const autenticado = (req, res, next) => {
         mensaje,
       });
     }
-    req.logIn(user, (err) => {
+    req.logIn(user, async (err) => {
       if (err) {
         return next(err);
       }
       req.session.usuario = user.dataValues;
+      req.session.chats = await obtenerMensajes(user.id);
       req.session.save(() => {
         res.redirect("/index");
       });

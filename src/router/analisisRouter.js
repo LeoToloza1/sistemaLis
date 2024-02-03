@@ -26,29 +26,28 @@ routerAnalisis.get("/listar/analisis/:id", async (req, res) => {
   }
 });
 //permiso de usuario normal ✔️
-routerAnalisis.get(
-  "/listar/analisis/orden/:id",
-
-  async (req, res) => {
-    const titulo = process.env.TITULO || "Sistema de Laboratorio";
-    try {
-      res.render("gestionAnalisis", { titulo });
-    } catch (error) {
-      res.status(500).json(error);
+routerAnalisis.get("/listar/analisis/orden/:id", async (req, res) => {
+  const titulo = process.env.TITULO || "Sistema de Laboratorio";
+  try {
+    const usuarioInfo = {
+      nombre: req.isAuthenticated() ? req.session.usuario.nombre : null,
+      rol: req.isAuthenticated() ? req.session.usuario.rol : null,
+    };
+    if (!req.isAuthenticated()) {
+      return res.redirect("/");
     }
+    res.render("gestionAnalisis", { titulo, usuarioInfo });
+  } catch (error) {
+    res.status(500).json(error);
   }
-);
+});
 //permiso de usuario normal ✔️
-routerAnalisis.get(
-  "/listar/analisis/paciente/orden/:id",
-
-  async (req, res) => {
-    try {
-      const orden = await buscarAnalisisPorOrden(req.params.id);
-      res.status(200).json(orden);
-    } catch (error) {
-      res.status(500).json(error);
-    }
+routerAnalisis.get("/listar/analisis/paciente/orden/:id", async (req, res) => {
+  try {
+    const orden = await buscarAnalisisPorOrden(req.params.id);
+    res.status(200).json(orden);
+  } catch (error) {
+    res.status(500).json(error);
   }
-);
+});
 export default routerAnalisis;

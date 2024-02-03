@@ -12,7 +12,14 @@ dotenv.config();
 routerTipoMuestra.get("/tipoMuestra", permisoProfesional, async (req, res) => {
   try {
     const titulo = process.env.TITULO || "Sistema de Laboratorio";
-    res.render("gestionTiposMuestras", { titulo });
+    const usuarioInfo = {
+      nombre: req.isAuthenticated() ? req.session.usuario.nombre : null,
+      rol: req.isAuthenticated() ? req.session.usuario.rol : null,
+    };
+    if (!req.isAuthenticated()) {
+      return res.redirect("/");
+    }
+    res.render("gestionTiposMuestras", { titulo, usuarioInfo });
   } catch (error) {
     res.status(500).json(error);
   }
