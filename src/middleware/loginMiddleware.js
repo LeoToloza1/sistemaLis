@@ -79,7 +79,7 @@ export const autenticado = (req, res, next) => {
         return next(err);
       }
       req.session.usuario = user.dataValues;
-      req.session.chats = await obtenerMensajes(user.id);
+      // req.session.chats = await obtenerMensajes(user.id);
       req.session.save(() => {
         res.redirect("/index");
       });

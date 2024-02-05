@@ -14,6 +14,7 @@ ordenRouter.get("/ordenes", async (req, res) => {
   try {
     const titulo = process.env.TITULO || "Sistema de Laboratorio";
     const usuarioInfo = {
+      id: req.isAuthenticated() ? req.session.usuario.id : null,
       nombre: req.isAuthenticated() ? req.session.usuario.nombre : null,
       rol: req.isAuthenticated() ? req.session.usuario.rol : null,
     };
@@ -45,6 +46,7 @@ ordenRouter.get("/listar/ordenes/paciente/:id", async (req, res) => {
     const orden = await listarOrdenPorUsuario(paciente);
     const pacienteEncontrado = await buscarPaciente(paciente);
     const usuarioInfo = {
+      id: req.isAuthenticated() ? req.session.usuario.id : null,
       nombre: req.isAuthenticated() ? req.session.usuario.nombre : null,
       rol: req.isAuthenticated() ? req.session.usuario.rol : null,
     };

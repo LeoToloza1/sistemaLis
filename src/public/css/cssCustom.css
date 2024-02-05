@@ -1,6 +1,14 @@
+body,
+html {
+  height: 100%;
+  margin: 0;
+}
+
 #fondoLaboratorio {
   background-image: url("../img/mujer-trabajando-laborator.jpg");
-  background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   height: 100%;
+  width: 100%;
 }

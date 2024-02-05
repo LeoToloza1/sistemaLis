@@ -32,7 +32,12 @@ import cors from "cors";
  */
 const app = express();
 const server = http.createServer(app);
-const io = configureSocket(server);
+const io = configureSocket(server, {
+  connectionStateRecovery: {
+    enabled: true,
+    maxAge: 30 * 60 * 1000,
+  },
+});
 /**
  * configuracion de middlewares de express
  * express-session

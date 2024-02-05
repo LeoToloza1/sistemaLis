@@ -2,15 +2,14 @@
     .rounded.shadow#chatContainer.fixed-bottom
         button#toggleChat.btn.btn-dark Chat Interno
             span.contador.ms-1.rounded
-        #chatBox.container.form-control
+        form#chatBox.container.form-control
             .chat
-                p#usuario Usuario: #{usuarioInfo.nombre}
                 div#recibido.container
-                input#mensaje(type="text" placeholder="Escriba su mensaje")
-                button#enviarMensaje.btn.btn-primary.ms-2 Enviar
-                span.emoji 😊
+                input#mensaje.border.border-solid.rounded(type="text" placeholder="Escriba su mensaje")
+                button#enviarMensaje.btn.btn-primary.ms-2(type="submit") Enviar
+
 
 footer.container.text-center.mt-3
     p © #{titulo}
 
-script(src="/js/index.js")
+//- script(src="/js/index.js" defer)

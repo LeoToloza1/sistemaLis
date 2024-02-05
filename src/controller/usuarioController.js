@@ -9,14 +9,13 @@ async function hashearPass(pass) {
   const salt = await bcrypt.genSalt(10);
   return bcrypt.hash(pass, salt);
 }
-
 export async function compararPass(passActual, passHash) {
   return await bcrypt.compare(passActual, passHash);
 }
 
 const rolesEnum = {
   nombre: "rol",
-  values: ["administrador", "usuario", "tecnico", "bioquimico"],
+  values: ["Administrador", "Usuario", "Tecnico", "Bioquimico"],
 };
 const permisosEnum = {
   nombre: "permiso",

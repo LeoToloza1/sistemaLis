@@ -220,7 +220,7 @@ async function guardarUsuario() {
     console.error("Error en la solicitud:", error);
   }
 }
-const idUsuario = document.getElementById("idUsuario").value;
+// const idUsuario = document.getElementById("idUsuario").value;
 async function editarUsuario(idUsuario) {
   const nombre = document.getElementById("nombre").value;
   const apellido = document.getElementById("apellido").value;

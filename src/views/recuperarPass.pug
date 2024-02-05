@@ -1,0 +1,15 @@
+include head
+div#fondoLaboratorio.container-fluid
+    form.container.p-1.mb-5
+        h1 Recuperación de Contraseña
+
+        div.container.form-group.mt-3
+            label(for="email") Correo Electrónico:
+            input.form-control(type="email" placeholder="Ingrese su correo" name="email" id="email")
+
+        div.text-center.mt-3
+            button.btn.btn-primary(type="submit" formaction="/error") Recuperar Contraseña
+
+
+    footer.text-xxl-end.fs-5.mt-5
+        p #{titulo} 

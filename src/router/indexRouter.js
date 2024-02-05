@@ -9,7 +9,6 @@
 import express from "express";
 const routerIndex = express.Router();
 import dotenv from "dotenv";
-import notifier from "node-notifier";
 import loginMiddleware from "../middleware/loginMiddleware.js";
 dotenv.config();
 
@@ -34,24 +33,16 @@ routerIndex.post("/", loginMiddleware.autenticado, (req, res, next) => {
   }
 });
 
-let mostrarNotificacion = true;
-
 // Ruta "/index"
 // funciona ✔️ - Finalizado
 routerIndex.get("/index", async (req, res) => {
   try {
-    if (mostrarNotificacion && req.isAuthenticated()) {
-      const notification = {
-        title: "Bienvenido al " + process.env.TITULO,
-        message: "Hola " + req.session.usuario.nombre,
-      };
-      notifier.notify(notification);
-      mostrarNotificacion = false;
-    }
     const titulo = process.env.TITULO || "Sistema de Laboratorio";
     const usuarioInfo = {
+      id: req.isAuthenticated() ? req.session.usuario.id : null,
       nombre: req.isAuthenticated() ? req.session.usuario.nombre : null,
       rol: req.isAuthenticated() ? req.session.usuario.rol : null,
+      // chats: req.isAuthenticated() ? req.session.chats : null,
     };
     if (!req.isAuthenticated()) {
       return res.redirect("/");
@@ -80,8 +71,6 @@ routerIndex.get("/logout", async (req, res) => {
   }
 });
 
-export default routerIndex;
-
 // pagina de error
 routerIndex.get("/error", async (req, res) => {
   try {
@@ -100,3 +89,17 @@ routerIndex.get("/accesoDenegado", async (req, res) => {
     res.status(500).json(error);
   }
 });
+/**
+ * ⏳ - En proceso
+ */
+routerIndex.get("/recuperarPass", async (req, res) => {
+  try {
+    const titulo = process.env.TITULO;
+    console.log(req.params);
+    res.render("recuperarPass.pug", { titulo });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+export default routerIndex;

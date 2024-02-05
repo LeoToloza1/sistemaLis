@@ -21,6 +21,7 @@ muestraRouter.get("/muestras/paciente/:id", async (req, res) => {
     const paciente = req.params.id;
     const pacienteEncontrado = await buscarPaciente(paciente);
     const usuarioInfo = {
+      id: req.isAuthenticated() ? req.session.usuario.id : null,
       nombre: req.isAuthenticated() ? req.session.usuario.nombre : null,
       rol: req.isAuthenticated() ? req.session.usuario.rol : null,
     };

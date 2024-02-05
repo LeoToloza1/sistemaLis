@@ -30,6 +30,7 @@ routerAnalisis.get("/listar/analisis/orden/:id", async (req, res) => {
   const titulo = process.env.TITULO || "Sistema de Laboratorio";
   try {
     const usuarioInfo = {
+      id: req.isAuthenticated() ? req.session.usuario.id : null,
       nombre: req.isAuthenticated() ? req.session.usuario.nombre : null,
       rol: req.isAuthenticated() ? req.session.usuario.rol : null,
     };
