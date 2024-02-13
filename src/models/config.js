@@ -9,7 +9,7 @@ class Conexion {
     password: process.env.DB_PASS,
     dialect: process.env.DB_DIALECT,
     database: process.env.DB_DATABASE,
-    logging: false, // Desactiva los logs de Sequelize
+    logging: false,
   });
   static async conectar() {
     try {

@@ -53,10 +53,14 @@ valoresReferenciaRouter.get(
 valoresReferenciaRouter.post("/agregar/valoresReferencia", async (req, res) => {
   try {
     const valor = req.body;
+    console.log(valor);
     const nuevoValor = await agregarValorReferencia(valor);
+    if (!nuevoValor) {
+      return res.render("error.pug", { error: error });
+    }
     res.status(200).json(nuevoValor);
   } catch (error) {
-    res.status(500).json(error);
+    res.render("error.pug", { error: error });
   }
 });
 

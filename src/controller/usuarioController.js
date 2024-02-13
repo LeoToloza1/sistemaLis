@@ -1,7 +1,7 @@
 import Usuario from "../models/usuario.js";
 import bcrypt, { hash } from "bcrypt";
-// import { Resend } from "resend";
 import { z } from "zod";
+import nodemailer from "nodemailer";
 import Ciudad from "../models/ciudad.js";
 import Estados from "../models/estados.js";
 
@@ -86,21 +86,72 @@ export const editarUsuario = async function (usuario) {
   }
 };
 
-function recuperarPass() {
-  const resend = new Resend("re_TN3tfsC8_JxCteKAaraEY7J9BkvVnhrFA");
-  resend.apiKeys.create({ name: "Production" });
-  (async function () {
-    const { data, error } = await resend.emails.send({
-      from: "LIS <admin@sistema.lis.com>",
-      to: ["leotoloza6@gmail.com"],
-      subject: "recuperar contraseña:",
-      html: "<strong>Hola Mundo</strong>",
+/**
+ * tengo que hacer el portal del usuario para que descargue el pdf de los resultados
+ * la recuperacion de contraseña no se va hacer
+ * el envio de mail tampoco se va a realizar
+ */
+
+export async function enviarMail(usuario) {
+  const nuevaPass = await asignarNuevaPass(usuario);
+  try {
+    // Configuración del transportador SMTP
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        type: "OAuth2",
+        user: process.env.USER_MAIL,
+        pass: process.env.MAIL_PASSWORD,
+        clientId: process.env.ID_CLIENT,
+        clientSecret: process.env.SECRET_CLIENT,
+        refreshToken: process.env.REFRESH_TOKEN,
+      },
     });
-    if (error) {
-      return console.error({ error });
-    }
-    console.log({ data });
-  })();
+    // Opciones del correo electrónico
+    let mailOptions = {
+      from: '"SISTEMA LIS" <leotoloza@gmail.com>',
+      to: usuario.email,
+      subject: "Reestablecimiento de Contraseña",
+      html: `
+        <div style="background-color: #f4f4f4; padding: 20px; border-radius: 10px;">
+          <h2 style="color: #333; font-family: Arial, sans-serif;">Tu contraseña ha sido reestablecida</h2>
+          <p style="color: #666; font-family: Arial, sans-serif;">Hola ${usuario.nombre},</p>
+          <p style="color: #666; font-family: Arial, sans-serif;">Hemos recibido una solicitud para reestablecer tu contraseña en el Sistema LIS.</p>
+          <p style="color: #666; font-family: Arial, sans-serif;">Tu nueva contraseña es: <strong>${nuevaPass}</strong></p>
+          <p style="color: #666; font-family: Arial, sans-serif;">Por favor, asegúrate de guardar tu nueva contraseña en un lugar seguro.</p>
+          <p style="color: #666; font-family: Arial, sans-serif;">Si no solicitaste este cambio, por favor ignora este mensaje o ponte en contacto con nuestro equipo de soporte.</p>
+          <p style="color: #666; font-family: Arial, sans-serif;">Gracias,</p>
+          <p style="color: #666; font-family: Arial, sans-serif;">El Equipo de Sistema LIS</p>
+        </div>
+      `,
+    };
+
+    // Envío del correo electrónico
+    let info = await transporter.sendMail(mailOptions);
+    console.log("Correo electrónico enviado:", info.response);
+    return true;
+  } catch (error) {
+    console.error("Error al enviar el correo electrónico:", error);
+  }
+}
+async function asignarNuevaPass(usuario) {
+  try {
+    const { password } = usuario;
+    const usuarioBuscado = await buscarUsuario(usuario);
+    const nuevaPassHasheada = await hashearPass(password);
+    await Usuario.update(
+      { password: nuevaPassHasheada },
+      {
+        where: {
+          id: usuarioBuscado.id,
+        },
+      }
+    );
+    return password;
+  } catch (error) {
+    console.log("Hubo un error al actualizar la contraseña -->", error);
+    throw new Error("Error al actualizar la contraseña");
+  }
 }
 
 export const listarUsuarios = async () => {

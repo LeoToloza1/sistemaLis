@@ -1,0 +1,34 @@
+include head
+
+div.card.mb-3#fondoLaboratorio
+    h1.card-title.text-center Bienvenido al #{titulo2} 
+        div.container 
+            h4 #{error} 
+            h4 #{mensaje}
+
+    .container.col-auto.mt-4
+        .card.border.border-solid.rounded-3.p-4.mb-4
+            h1 Ingrese para descargar sus Resultados
+            form(action="/listado/resultados" method="GET")
+                .form-group
+                    label.form-label(for="email") Email:
+                    input#email.form-control(type="email" name="email" placeholder="nombre@gmail.com" autofocus)
+
+                .form-group.mt-3
+                    label.form-label(for="dni") Documento:
+                    input#password.form-control(type="text" name="password" placeholder="ingrese su DNI")
+
+                .form-group.mt-3
+                    div.row.justify-content-center
+                        .col-6.text-center
+                            button#btnLogin.btn.btn-dark.d-inline-flex.focus-ring(type="submit" role="button") Acceder
+
+
+            //- .card.p-1.mb-4.mt-4
+            //-     label(for="recuperarPass")
+            //-     button#recuperarPass.btn.btn-primary.mt-2 Recuperar contraseña
+
+
+
+
+script(src="/js/login.js" defer)

@@ -1,15 +1,43 @@
 include head
+//- hacer formulario un poco mas chico y validar password y confirmar password
 div#fondoLaboratorio.container-fluid
-    form.container.p-1.mb-5
-        h1 Recuperación de Contraseña
-
+    form.container-sm.p-1.mb-5(action="/recuperar-Pass" method="POST" onsubmit="return validarFormulario()")
+        h1(mt-3) Recuperación de Contraseña
         div.container.form-group.mt-3
             label(for="email") Correo Electrónico:
-            input.form-control(type="email" placeholder="Ingrese su correo" name="email" id="email")
-
+            input#email.form-control(type="email" placeholder="Ingrese su correo" name="email")
+            label(for="password") Nueva Contraseña:
+            input#password.form-control(type="password" placeholder="Ingrese su nueva contraseña" name="password")
+            label(for="confirmPassword") Repetir Contraseña:
+            input#confirmPassword.form-control(type="password" placeholder="Repita su nueva contraseña")
+        .form-group.form-check.form-switch.mt-3
+            input#mostrarContrasena.form-check-input(type="checkbox" role="switch" aria-describedby="verPass")
+        div#verPass.text-muted Mostrar contraseña
         div.text-center.mt-3
-            button.btn.btn-primary(type="submit" formaction="/error") Recuperar Contraseña
-
+            button#btnRecuperoPassword.btn.btn-dark(type="submit") Recuperar Contraseña
 
     footer.text-xxl-end.fs-5.mt-5
         p #{titulo} 
+
+
+script.
+    const password = document.getElementById("password")
+    const confirmPassword = document.getElementById("confirmPassword")
+    const form = document.querySelector('form')
+    function validarFormulario() {
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirmPassword");
+            if (password.value !== confirmPassword.value) {
+                alert("Las contraseñas no coinciden");
+                return false;
+                }else if (password.value.length < 8){
+                alert("La contraseña debe tener al menos 8 caracteres")
+                return false
+                }
+            return true;
+        }
+    const checkPass = document.getElementById("mostrarContrasena");
+    checkPass.addEventListener("change", function () {
+        password.type = checkPass.checked ? "text" : "password";
+        confirmPassword.type = checkPass.checked ? "text" : "password";
+    })

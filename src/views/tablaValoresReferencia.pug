@@ -12,8 +12,12 @@
                     th Embarazo
                     th Acciones
             tbody#tablaGenerica
+.container.my-4
+    button#btnValor.btn.btn-primary.btn-sm(type="button" data-toggle="modal" onclick="formularioValoresReferencia()") Agregar nuevo valor
 
-#formularioValoresReferencia.modal.fade(tabindex='-1' role='dialog')
+
+
+#formularioValoresReferencia.modal.fade(data-bs-backdrop="static" aria-hidden="false" aria-labelledby="modalValoresReferenciaLabel" tabindex='-1' role='dialog')
     .modal-dialog(role='document')
         .modal-content
             .modal-header

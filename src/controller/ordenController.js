@@ -109,11 +109,7 @@ export const listarOrdenPorUsuario = async function (paciente) {
 
     return ordenPaciente;
   } catch (error) {
-    console.log(
-      `error al listar las ordenes del paciente => ${paciente}`,
-      error
-    );
-    throw error;
+    throw new Error(`error al listar las ordenes del paciente `);
   }
 };
 

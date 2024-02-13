@@ -3,10 +3,12 @@ import {
   registrarPaciente,
   editarPaciente,
   buscarPaciente,
+  buscarPacientePorEmail,
 } from "../controller/pacienteController.js";
 import express from "express";
 const routerPaciente = express.Router();
 import dotenv from "dotenv";
+import loginMiddleware from "../middleware/loginMiddleware.js";
 dotenv.config();
 
 routerPaciente.get("/pacientes", async (req, res) => {
@@ -45,6 +47,16 @@ routerPaciente.get("/paciente/:id", async (req, res) => {
     res.status(200).json(paciente);
   } catch (error) {
     res.status(500).json(error);
+  }
+});
+
+routerPaciente.get("/buscar/paciente/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const paciente = await buscarPacientePorEmail(email);
+    res.status(200).json(paciente);
+  } catch (error) {
+    res.render("error.pug", { error: error.message });
   }
 });
 

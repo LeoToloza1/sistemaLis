@@ -110,13 +110,30 @@ async function cargarDatosEnTabla() {
     datosOrdenesPorPaciente.forEach((dato, index) => {
       content += `
         <tr>
-          <td> ${dato.id}</td>
-          <td> ${dato.paciente.nombre} ${dato.paciente.apellido}</td>
-          <td> ${dato.estado.nombre} </td>
-          <td> ${dato.fechaResultados || "Esperando fecha"} </td>
-          <td> ${dato.diagnostico.nombre || "No presenta diagnostico"} </td>
-          <td> ${dato.observaciones || "No hay observaciones"} </td>
-          <td> ${dato.usuario || "Administrador"}</td>
+        <td>${dato.id}</td>
+                        <td>${dato.paciente.nombre} ${
+        dato.paciente.apellido
+      }</td>
+                        <td>${dato.estado.nombre}</td>
+                        <td>${
+                          dato.fechaResultados || "esperando resultados..."
+                        }</td>
+                        <td>${
+                          dato.diagnostico
+                            ? dato.diagnostico.nombre
+                            : "no se cargó diagnostico"
+                        }</td>
+                        <td>${dato.observaciones || "no hay observaciones"}</td>
+                        <td>${
+                          dato.usuario
+                            ? dato.usuario.nombre +
+                              " " +
+                              dato.usuario.apellido +
+                              " (" +
+                              dato.usuario.rol +
+                              ")"
+                            : "Administrador"
+                        }</td>
           <td> <button class="editar-btn btn btn-dark" data-index="${index}"><i class='fa-solid fa-pen'></i></i></button>
           <button class="analisis-btn btn btn-success" data-index="${index}"><i class='fa-solid fa-file-contract'></i></button> </td>
         </tr>`;
@@ -233,7 +250,6 @@ async function guardarOrden() {
     const id_estado = Number(
       estadoSelect.options[estadoSelect.selectedIndex].value
     );
-    const fechaResultado = document.getElementById("fechaResultado");
     const diagnosticoSelect = document.getElementById("id_diagnostico");
     const id_diagnostico = Number(
       diagnosticoSelect.options[diagnosticoSelect.selectedIndex].value
@@ -257,7 +273,6 @@ async function guardarOrden() {
     const orden = {
       id_paciente,
       id_estado,
-      fechaResultado,
       id_diagnostico,
       observaciones,
       examenesID,
@@ -286,7 +301,6 @@ async function editarOrden(idOrden) {
   const estadoSelect = document.getElementById("id_estado");
   const id_estado = estadoSelect.options[estadoSelect.selectedIndex].value;
   if (estadosEditables.includes(id_estado)) {
-    const fechaResultado = document.getElementById("fechaResultado").value;
     const diagnosticoSelect = document.getElementById("id_diagnostico");
     const id_diagnostico = Number(
       diagnosticoSelect.options[diagnosticoSelect.selectedIndex].value
@@ -312,7 +326,6 @@ async function editarOrden(idOrden) {
     const orden = {
       idOrden,
       id_estado,
-      fechaResultado,
       id_diagnostico,
       observaciones,
       id_examen,

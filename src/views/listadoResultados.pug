@@ -1,0 +1,25 @@
+include head
+title = titulo
+.container-fluid
+    h1.text-center.bg-dark.text-light.rounded.shadow Bienvenido #{pacienteEncontrado.nombre} #{pacienteEncontrado.apellido}
+    hr
+    h4.text-center Este es tu listado de Resultados
+
+    .row
+        .col-12
+            table#tablaGenerica
+                thead
+                    tr
+                        th N° de orden
+                        th Nombre y Apellido
+                        th Fecha de Resultados
+                        th Diagnostico
+                        th Descarga
+                tbody#tablaGenerica
+                    tr
+
+footer.fixed-bottom.rounded.shadow.bg-dark.p-1.text-light.m-auto
+    .conteiner-fluid
+        .row
+            p Para descargar los resultados haga click en el boton de la derecha de la tabla
+script(src="/js/listadoResultados.js" defer) 

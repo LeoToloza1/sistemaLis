@@ -56,7 +56,6 @@ passport.deserializeUser(async function (id, done) {
     done(error);
   }
 });
-
 // ✔️ - Funciona
 //quedamos en guardar los chat de la session y maejarlos en la base datos
 export const autenticado = (req, res, next) => {

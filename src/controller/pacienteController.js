@@ -12,7 +12,7 @@ export const listarPacientes = async () => {
     return pacientes;
   } catch (error) {
     console.error("Error al listar pacientes:", error);
-    return { error: "Error al obtener la lista de pacientes" };
+    throw new Error("Error al obtener la lista de pacientes");
   }
 };
 
@@ -22,7 +22,7 @@ export const registrarPaciente = async (paciente) => {
     return nuevoPaciente;
   } catch (error) {
     console.error("Error al registrar el paciente:", error);
-    return { error: "Error al registrar el paciente" };
+    throw new Error("Error al registrar el paciente");
   }
 };
 
@@ -33,8 +33,7 @@ export const editarPaciente = async (paciente) => {
     });
     return pacienteActualizado;
   } catch (error) {
-    console.error("Error al editar el paciente:", error);
-    return { error: "Error al editar el paciente" };
+    throw new Error("Error al editar el paciente");
   }
 };
 
@@ -43,6 +42,26 @@ export const buscarPaciente = async (paciente) => {
     const pacienteEncontrado = await Paciente.findByPk(paciente);
     return pacienteEncontrado;
   } catch (error) {
-    return "Hubo un error al buscar un paciente", error;
+    throw new Error("Hubo un error al buscar un paciente", error);
+  }
+};
+
+export const buscarPacientePorEmail = async (email) => {
+  try {
+    const paciente = await Paciente.findOne({
+      where: {
+        email,
+      },
+      include: {
+        model: Ciudad,
+        attributes: ["nombre"],
+      },
+    });
+    if (!paciente) {
+      throw new Error("Paciente no encontrado");
+    }
+    return paciente;
+  } catch (error) {
+    throw new Error("Paciente no encontrado");
   }
 };

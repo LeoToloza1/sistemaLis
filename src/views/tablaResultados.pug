@@ -1,0 +1,40 @@
+.container-fluid
+    .row
+        table#tablaGenerica.table.table-striped
+            caption Resultados
+            thead
+                tr
+                    th Numero de Resultado
+                    th Numero de Orden
+                    th Nombre y Apellido
+                    th Resultado
+                    th Determinacion
+                    th Valores de referencia
+                    th Unidad de Medida
+                    th Aprobado Por
+                    th Detalle
+            tbody#tablaGenerica
+.container.my-4
+    button#btnResultado.btn.btn-dark.btn-sm(type="button" data-toggle="modal" onclick="formularioResultados()") Agregar Resultado
+
+.modal.fade#seleccionarOrdenes(data-bs-backdrop="static" aria-hidden="false" aria-labelledby="modalOrdenesLabel" tabindex="-1")
+    .modal-dialog.modal-dialog-centered
+        .modal-content
+            .modal-header
+                h5.modal-title Seleccionar Orden
+            .modal-body
+                .form-group
+                    input(type="hidden" id="id" value="")
+                    label.form-label(for="selectOrden") Seleccione una orden:
+                    select.form-select#selectOrden
+                    label.form-label(for="selectDeterminacion") Determinación:
+                    select.form-select#selectDeterminacion
+                    label(for="inputResultados") Agregue el resultado:
+                    input#inputResultados.form-control(type="numer" min=0)
+                    label.form-label(for="inputAprobadoPor") Aprobado por:
+                    select.form-select#selectUsuario(name="usuario")
+
+            .modal-footer
+                button.btn.btn-secondary(type="button" data-bs-dismiss="modal") Cerrar
+                button.btn.btn-primary#btnMostrarDatosOrden(type="button" onclick="guardar_actualizarUsuario()") Guardar Resultados
+

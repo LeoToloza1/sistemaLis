@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import Conexion from "./config.js";
-import Estados from "./estados.js";
+import Orden from "./orden.js";
 import Usuario from "./usuario.js";
 import Determinacion from "./determinacion.js";
 
@@ -12,6 +12,9 @@ Resultado.init(
       primaryKey: true,
       autoIncrement: true,
     },
+    id_orden: {
+      type: DataTypes.INTEGER,
+    },
     id_determinacion: {
       type: DataTypes.INTEGER,
     },
@@ -21,17 +24,23 @@ Resultado.init(
     id_usuario: {
       type: DataTypes.INTEGER,
     },
+    createdAt: {
+      type: DataTypes.DATE,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+    },
   },
   {
     sequelize: Conexion.sequelize,
-    modelName: "resultado",
-    tableName: "resultado",
+    modelName: "resultados",
+    tableName: "resultados",
     timestamps: true,
   }
 );
 
-Estados.hasMany(Resultado, { foreignKey: "id_estado" });
-Resultado.belongsTo(Estados, { foreignKey: "id_estado" });
+Orden.hasMany(Resultado, { foreignKey: "id_orden" });
+Resultado.belongsTo(Orden, { foreignKey: "id_orden", as: "orden" });
 
 Usuario.hasMany(Resultado, { foreignKey: "id_usuario" });
 Resultado.belongsTo(Usuario, { foreignKey: "id_usuario" });

@@ -83,26 +83,36 @@ export const editarAnalisis = async function (analisis, idExamen) {
     }
     console.log(analisis);
     const analisiActualizado = await Analisis.findByPk(analisis.id);
-    const examen = await Examen.findAll({
-      where: {
-        id: idExamen,
-      },
-    });
-    await analisiActualizado.setExamen(examen);
-    console.log(analisiActualizado);
+    if (!Array.isArray(idExamen)) {
+      idExamen = [idExamen];
+    }
 
+    for (const id of idExamen) {
+      const examen = await Examen.findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      if (examen) {
+        await analisiActualizado.addExamen(examen);
+      }
+    }
+    console.log(analisiActualizado);
     const fechaEntrega = await calcularFechaEntrega(analisis.id_orden);
     const orden = await buscarOrdenID(analisis.id_orden);
-
     orden.fechaResultados = fechaEntrega;
-    await orden.save();
-
+    await Orden.update(
+      { fechaResultados: orden.fechaResultados },
+      { where: { id: analisis.id_orden } }
+    );
     return analisiActualizado;
   } catch (error) {
     console.error("Error al editar el análisis:", error);
     throw error;
   }
 };
+
 export async function examenEnUso(idExamen) {
   const analisis = await Analisis.findAll({
     where: { id_examen: idExamen },

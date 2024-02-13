@@ -119,11 +119,14 @@ function guardar_actualizarValoresReferencia() {
 }
 async function guardarValoresReferencia() {
   const genero = document.getElementById("genero").value;
-  const edadMin = document.getElementById("edadMin").value;
-  const edadMax = document.getElementById("edadMax").value;
-  const valorMin = document.getElementById("valorMin").value;
-  const valorMax = document.getElementById("valorMax").value;
-  const embarazo = document.getElementById("embarazo").value;
+  const edadMin = Number(document.getElementById("edadMin").value);
+  const edadMax = Number(document.getElementById("edadMax").value);
+  const valorMin = Number(document.getElementById("valorMin").value);
+  const valorMax = Number(document.getElementById("valorMax").value);
+  let embarazo = document.getElementById("embarazo").value;
+  if (embarazo === "no") {
+    embarazo = null;
+  }
   const valoresReferencia = {
     genero,
     edadMin,

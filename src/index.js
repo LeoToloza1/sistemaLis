@@ -24,6 +24,7 @@ import ordenRouter from "./router/ordenRouter.js";
 import routerDiagnostico from "./router/diagnosticoRouter.js";
 import muestrasRouter from "./router/muestrasRouter.js";
 import routerAnalisis from "./router/analisisRouter.js";
+import resultadoRouter from "./router/resultados.js";
 import { configureSocket } from "./configSocket.js";
 import http from "http";
 import cors from "cors";
@@ -76,7 +77,9 @@ app.set("views", path.join(__dirname, "views"));
  * rutas
  */
 app.use("/", routerIndex);
-app.use("/", loginMiddleware.ensureAuthenticated, routerPaciente);
+app.use("/", ordenRouter);
+app.use("/", routerPaciente);
+app.use("/", resultadoRouter);
 app.use("/", loginMiddleware.ensureAuthenticated, routerCiudades);
 app.use("/", loginMiddleware.ensureAuthenticated, routerExamen);
 app.use("/", loginMiddleware.ensureAuthenticated, usuarioRouter);
@@ -85,7 +88,7 @@ app.use("/", loginMiddleware.ensureAuthenticated, determinacionRouter);
 app.use("/", loginMiddleware.ensureAuthenticated, valoresReferenciaRouter);
 app.use("/", loginMiddleware.ensureAuthenticated, routerTipoMuestra);
 app.use("/", loginMiddleware.ensureAuthenticated, routerUnidadMedida);
-app.use("/", loginMiddleware.ensureAuthenticated, ordenRouter);
+
 app.use("/", loginMiddleware.ensureAuthenticated, routerDiagnostico);
 app.use("/", loginMiddleware.ensureAuthenticated, muestrasRouter);
 app.use("/", loginMiddleware.ensureAuthenticated, routerAnalisis);
@@ -114,12 +117,12 @@ export default app;
 
 // const upload = multer({ storage: storage });
 
-// // Ruta para subir una imagen
+//  Ruta para subir una imagen
 // app.post("/upload", upload.single("image"), (req, res) => {
 //   res.send("Imagen subida con éxito");
 // });
 
 // app.use(express.static(path.join(__dirname, "public")));
 
-// // Para servir las imágenes subidas
+//  Para servir las imágenes subidas
 // app.use("/uploads", express.static("uploads"));

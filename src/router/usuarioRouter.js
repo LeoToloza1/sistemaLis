@@ -1,4 +1,5 @@
 import {
+  buscarUsuario,
   editarUsuario,
   listarUsuarios,
   registrarUsuario,
@@ -54,6 +55,13 @@ usuarioRouter.post("/actualizar/usuario/:id", async (req, res) => {
 usuarioRouter.post("/agregar/usuario", async (req, res) => {
   try {
     const usuario = req.body;
+    console.log(usuario);
+    const usuarioExistente = await buscarUsuario(usuario);
+    if (usuario.email === usuarioExistente.email) {
+      console.log(usuario.email);
+      console.log(usuarioExistente.email);
+      return res.status(400).json({ error: "El correo ya existe" });
+    }
     const nuevoUsuario = await registrarUsuario(usuario);
     res.status(200).json(nuevoUsuario);
   } catch (error) {
